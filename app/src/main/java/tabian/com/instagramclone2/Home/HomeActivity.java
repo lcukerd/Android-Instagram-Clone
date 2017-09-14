@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
 
-        setupFirebaseAuth();
+//        setupFirebaseAuth();
 
         initImageLoader();
         setupBottomNavigationView();
@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
      * checks to see if the @param 'user' is logged in
      * @param user
      */
-     private void checkCurrentUser(FirebaseUser user){
+     /*private void checkCurrentUser(FirebaseUser user){
          Log.d(TAG, "checkCurrentUser: checking if user is logged in.");
 
          if(user == null){
@@ -106,9 +106,9 @@ public class HomeActivity extends AppCompatActivity {
              startActivity(intent);
          }
      }
-    /**
+    *//**
      * Setup the firebase auth object
-     */
+     *//*
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
@@ -137,7 +137,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+//        mAuth.addAuthStateListener(mAuthListener);
         checkCurrentUser(mAuth.getCurrentUser());
     }
 
@@ -147,6 +147,6 @@ public class HomeActivity extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-    }
+    }*/
 
 }

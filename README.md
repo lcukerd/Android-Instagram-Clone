@@ -1,3 +1,6 @@
+Originally, this project is a clone of Instagram made using Firebase(auth,data etc) owned bt Mitch Tabian. I have edited/am editing the source code to make it retirieve real Instagram data and show in the pre-built UI of this project and a few pieces of UI made by me. I am not using Instagram API, because it might never get accepted to get me out of sandbox API, instead I am trying to retrieve data from source code of its web page.
+This app will show pic and video in fullscreen mode and will allow to swipe to get to next pic. It might seem much but will be heaven for some of us.
+
 <img class='header-img' src='https://s3.amazonaws.com/codingwithmitch-static-and-media/media/instagram-clone/images/Instagram.png' />
 
 <h1>Android Instagram Clone Course</h1>

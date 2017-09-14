@@ -56,8 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         mPleaseWait.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
 
-        setupFirebaseAuth();
-        init();
+//        setupFirebaseAuth();
+//        init();
 
     }
 
@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
     ------------------------------------ Firebase ---------------------------------------------
      */
 
-     private void init(){
+     /*private void init(){
 
          //initialize the button for logging in
          Button btnLogin = (Button) findViewById(R.id.btn_login);
@@ -147,9 +147,9 @@ public class LoginActivity extends AppCompatActivity {
              }
          });
 
-         /*
+         *//*
          If the user is logged in then navigate to HomeActivity and call 'finish()'
-          */
+          *//*
          if(mAuth.getCurrentUser() != null){
              Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
              startActivity(intent);
@@ -157,9 +157,9 @@ public class LoginActivity extends AppCompatActivity {
          }
      }
 
-    /**
+    *//**
      * Setup the firebase auth object
-     */
+     *//*
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
@@ -194,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-    }
+    }*/
 }
 
 
