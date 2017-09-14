@@ -1,23 +1,18 @@
 package tabian.com.instagramclone2.Home;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import tabian.com.instagramclone2.Login.LoginActivity;
 import tabian.com.instagramclone2.R;
 import tabian.com.instagramclone2.Utils.BottomNavigationViewHelper;
 import tabian.com.instagramclone2.Utils.SectionsPagerAdapter;

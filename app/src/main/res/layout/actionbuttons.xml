@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/actionButtons"
+
+    android:background="#00ffffff">
+
+    <Button
+        android:id="@+id/popupadd"
+        android:layout_width="50sp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_column="2"
+        android:layout_row="0"
+        android:background="@android:drawable/ic_menu_add" />
+
+    <Button
+        android:id="@+id/popupdel"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_alignParentTop="true"
+        android:layout_column="0"
+        android:layout_row="0"
+        android:background="@android:drawable/ic_menu_delete" />
+
+
+</GridLayout>

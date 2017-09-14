@@ -1,35 +1,35 @@
 package tabian.com.instagramclone2.Search;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.constraint.solver.widgets.WidgetContainer;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.util.ArrayList;
+
+import tabian.com.instagramclone2.Database.DbInteract;
 import tabian.com.instagramclone2.R;
 import tabian.com.instagramclone2.Utils.BottomNavigationViewHelper;
+import tabian.com.instagramclone2.Utils.UserListAdapter;
+import tabian.com.instagramclone2.Utils.user;
 
 /**
  * Created by User on 5/28/2017.
@@ -40,6 +40,9 @@ public class SearchActivity extends AppCompatActivity
     private static final String TAG = "SearchActivity";
     private static final int ACTIVITY_NUM = 1;
     private RecyclerView userlist;
+    private ArrayList<user> usersArrayList;
+    private UserListAdapter adapter;
+    private DbInteract interact;
 
     private Context mContext = SearchActivity.this;
 
@@ -47,11 +50,23 @@ public class SearchActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppThemewithmenu);
         setContentView(R.layout.activity_home);
+
         Log.d(TAG, "onCreate: started.");
 
-        userlist = (RecyclerView) findViewById(R.id.recycler_users);
+        interact = new DbInteract(this);
 
+        findViewById(R.id.relLayout1).setVisibility(View.GONE);
+
+        userlist = (RecyclerView) findViewById(R.id.recycler_users);
+        userlist.setVisibility(View.VISIBLE);
+        usersArrayList = new ArrayList<>();
+        usersArrayList.addAll(interact.readfromDB());
+
+        adapter = new UserListAdapter(usersArrayList, this);
+        userlist.setLayoutManager(new LinearLayoutManager(this));
+        userlist.setAdapter(adapter);
 
         setupBottomNavigationView();
     }
@@ -77,7 +92,40 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String query)
             {
-                return false;
+                Log.d(TAG, "Search Text " + query);
+                adapter.clear();
+                Ion.with(getApplicationContext()).load("https://www.instagram.com/" + query + "/").asString().setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        adapter.clear();
+                        ImageLoader imageLoader = ImageLoader.getInstance();
+                        try
+                        {
+                            final String username = result.substring(result.indexOf("<meta property=\"og:title\" content=")
+                                    + 35, result.indexOf("Instagram photos", result.indexOf("<meta property=\"og:title\" content=")) - 5);
+                            final String url = result.substring(result.indexOf("<meta property=\"og:image\" content=\"")
+                                    + 35, result.indexOf(" />", result.indexOf("<meta property=\"og:image\" content=")) - 1);
+                            imageLoader.loadImage(url, new SimpleImageLoadingListener()
+                            {
+                                @Override
+                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
+                                {
+                                    adapter.add(new user(loadedImage, username, url));
+                                }
+                            });
+                            Log.d(TAG, username);
+                            Log.d(TAG, url);
+                        }
+                        catch (StringIndexOutOfBoundsException ex)
+                        {
+                            Log.d(TAG,"",ex);
+                            Toast.makeText(getApplicationContext(),"User not found!!",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                return true;
             }
 
             @Override
@@ -85,11 +133,7 @@ public class SearchActivity extends AppCompatActivity
             {
                 if (TextUtils.isEmpty(newText))
                 {
-                    //refill adapter
-                } else
-                {
-                    Log.d(LOG_TAG, newText);
-                    adapter.getFilter().filter(newText);
+                    adapter.refill(interact.readfromDB());
                 }
                 return true;
             }

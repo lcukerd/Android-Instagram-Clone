@@ -1,7 +1,5 @@
 package tabian.com.instagramclone2.Utils;
 
-import android.app.ProgressDialog;
-
 import java.io.File;
 import java.util.ArrayList;
 

@@ -1,6 +1,5 @@
 package tabian.com.instagramclone2.Profile;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import tabian.com.instagramclone2.Login.LoginActivity;
 import tabian.com.instagramclone2.R;
 import tabian.com.instagramclone2.Utils.BottomNavigationViewHelper;
 import tabian.com.instagramclone2.Utils.FirebaseMethods;
@@ -45,7 +42,6 @@ import tabian.com.instagramclone2.Utils.GridImageAdapter;
 import tabian.com.instagramclone2.Utils.UniversalImageLoader;
 import tabian.com.instagramclone2.models.Like;
 import tabian.com.instagramclone2.models.Photo;
-import tabian.com.instagramclone2.models.User;
 import tabian.com.instagramclone2.models.UserAccountSettings;
 import tabian.com.instagramclone2.models.UserSettings;
 

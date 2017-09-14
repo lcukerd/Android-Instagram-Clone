@@ -1,6 +1,5 @@
 package tabian.com.instagramclone2.Utils;
 
-import android.content.Context;
 import android.os.Environment;
 
 /**

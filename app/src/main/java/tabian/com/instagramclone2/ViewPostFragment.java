@@ -1,12 +1,9 @@
 package tabian.com.instagramclone2;
 
 
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,8 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,8 +26,6 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -40,11 +33,9 @@ import java.util.TimeZone;
 
 import tabian.com.instagramclone2.Utils.BottomNavigationViewHelper;
 import tabian.com.instagramclone2.Utils.FirebaseMethods;
-import tabian.com.instagramclone2.Utils.GridImageAdapter;
 import tabian.com.instagramclone2.Utils.SquareImageView;
 import tabian.com.instagramclone2.Utils.UniversalImageLoader;
 import tabian.com.instagramclone2.models.Photo;
-import tabian.com.instagramclone2.models.User;
 import tabian.com.instagramclone2.models.UserAccountSettings;
 
 /**

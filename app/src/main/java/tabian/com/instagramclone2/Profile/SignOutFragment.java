@@ -16,8 +16,6 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.net.Inet4Address;
-
 import tabian.com.instagramclone2.Login.LoginActivity;
 import tabian.com.instagramclone2.R;
 
