@@ -11,11 +11,13 @@ public class user
     public Bitmap profile;
     public String name;
     public String url;
+    public String query;
 
-    public user(Bitmap p,String n,String u)
+    public user(Bitmap p,String n,String u,String q)
     {
         profile = p;
         name = n;
         url = u;
+        query = q;
     }
 }

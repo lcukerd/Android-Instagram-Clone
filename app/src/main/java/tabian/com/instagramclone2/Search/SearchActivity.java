@@ -90,7 +90,7 @@ public class SearchActivity extends AppCompatActivity
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
             @Override
-            public boolean onQueryTextSubmit(String query)
+            public boolean onQueryTextSubmit(final String query)
             {
                 Log.d(TAG, "Search Text " + query);
                 adapter.clear();
@@ -112,7 +112,7 @@ public class SearchActivity extends AppCompatActivity
                                 @Override
                                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
                                 {
-                                    adapter.add(new user(loadedImage, username, url));
+                                    adapter.add(new user(loadedImage, username, url,query));
                                 }
                             });
                             Log.d(TAG, username);

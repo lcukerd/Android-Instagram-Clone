@@ -1,3 +1,4 @@
+/*
 package tabian.com.instagramclone2.Share;
 
 import android.content.Intent;
@@ -29,9 +30,11 @@ import tabian.com.instagramclone2.Utils.FilePaths;
 import tabian.com.instagramclone2.Utils.FileSearch;
 import tabian.com.instagramclone2.Utils.GridImageAdapter;
 
+*/
 /**
  * Created by User on 5/28/2017.
- */
+ *//*
+
 
 public class GalleryFragment extends Fragment {
     private static final String TAG = "GalleryFragment";
@@ -242,3 +245,4 @@ public class GalleryFragment extends Fragment {
 
 
 
+*/

@@ -14,6 +14,7 @@ public class eventDBcontract extends SQLiteOpenHelper
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ListofItem.tableName + " (" +
                     ListofItem.columnurl + " TEXT, " +
+                    ListofItem.columnquery + " TEXT, " +
                     ListofItem.columnimage + " BLOB, " +
                     ListofItem.columnuser + " TEXT );";
 
@@ -41,6 +42,7 @@ public class eventDBcontract extends SQLiteOpenHelper
         public static final String tableName = "Users",
                 columnuser = "username",
                 columnurl = "url",
+                columnquery = "query",
                 columnimage = "profile_pic";
     }
 }

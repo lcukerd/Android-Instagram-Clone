@@ -64,7 +64,7 @@ public class ShareActivity extends AppCompatActivity{
      */
     private void setupViewPager(){
         SectionsPagerAdapter adapter =  new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new GalleryFragment());
+        //adapter.addFragment(new GalleryFragment());
         adapter.addFragment(new PhotoFragment());
 
         mViewPager = (ViewPager) findViewById(R.id.container);

@@ -28,6 +28,7 @@ public class DbInteract
     private String[] projection = {
             eventDBcontract.ListofItem.columnuser,
             eventDBcontract.ListofItem.columnurl,
+            eventDBcontract.ListofItem.columnquery,
             eventDBcontract.ListofItem.columnimage
     };
     private static String TAG = DbInteract.class.getSimpleName();
@@ -40,6 +41,7 @@ public class DbInteract
     public ArrayList<user> readfromDB()
     {
         SQLiteDatabase db = dBcontract.getReadableDatabase();
+
         Cursor cursor = db.query(eventDBcontract.ListofItem.tableName, projection, null, null, null, null, null);
 
         ArrayList<user> usernames = new ArrayList<>();
@@ -47,14 +49,15 @@ public class DbInteract
         while (cursor.moveToNext())
             usernames.add(new user(getImage(cursor.getBlob(cursor.getColumnIndex(eventDBcontract.ListofItem.columnimage))),
                     cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnuser)),
-                    cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnuser))));
+                    cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnurl)),
+                    cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnquery))));
 
         Log.d(TAG, "Returned " + String.valueOf(cursor.getCount()) + " usernames");
         return (usernames);
     }
 
 
-    public void adduser(Bitmap profilePic,String username,String url)
+    public void adduser(Bitmap profilePic,String username,String url,String query)
     {
         SQLiteDatabase db = dBcontract.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -62,6 +65,7 @@ public class DbInteract
         values.put(eventDBcontract.ListofItem.columnimage, getBitmapAsByteArray(profilePic));
         values.put(eventDBcontract.ListofItem.columnuser, username);
         values.put(eventDBcontract.ListofItem.columnurl, url);
+        values.put(eventDBcontract.ListofItem.columnquery, query);
         db.insert(eventDBcontract.ListofItem.tableName, null, values);
         Log.d(TAG, "Add User " + username);
     }

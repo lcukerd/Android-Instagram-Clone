@@ -1,6 +1,8 @@
 package tabian.com.instagramclone2.Utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -16,10 +18,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 
 import tabian.com.instagramclone2.Database.DbInteract;
+import tabian.com.instagramclone2.Profile.ProfileActivity;
 import tabian.com.instagramclone2.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -73,7 +82,38 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
             @Override
             public void onClick(View v)
             {
-                //open that user
+                Ion.with(mContext).load("https://www.instagram.com/" + u.query + "/").asString().setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        ArrayList<String> urls = new ArrayList<>();
+                        String id = "";
+                        int pos=0;
+                        for (int i=0;i<12;i++)
+                        {
+                            String url = result.substring(result.indexOf("thumbnail_src",pos) + 17,
+                                    result.indexOf ("\",",result.indexOf("thumbnail_src",pos)) );
+                            url.replace("s640x640","s360x360");
+                            urls.add(url);
+                            Log.d(LOG_TAG,url);
+                            if (i==11)
+                            {
+                                int start = result.indexOf("\"GraphImage\", \"id\"",pos);
+                                int end = result.indexOf("\",",result.indexOf("\"GraphImage\", \"id\"",pos)+21);
+                                id = result.substring(start + 21,end);
+                                id = "https://www.instagram.com/" + u.query + "/?max_id=" + id;
+                                Log.d(LOG_TAG,id);
+                            }
+                            pos = result.indexOf ("\",",result.indexOf("thumbnail_src",pos)) ;
+                        }
+                        Intent intent = new Intent(mContext, ProfileActivity.class);
+                        intent.putStringArrayListExtra("urls",urls);
+                        intent.putExtra("id",id);
+                        mContext.startActivity(intent);
+                    }
+                });
+
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener()
@@ -109,7 +149,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                         {
                             interact.adduser(u.profile,
                                     u.name,
-                                    u.url);
+                                    u.url,
+                                    u.query);
                             pw.dismiss();
                         }
                     });
