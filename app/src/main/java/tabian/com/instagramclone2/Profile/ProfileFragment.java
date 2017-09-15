@@ -2,9 +2,7 @@ package tabian.com.instagramclone2.Profile;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -20,30 +18,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import tabian.com.instagramclone2.R;
 import tabian.com.instagramclone2.Utils.BottomNavigationViewHelper;
-import tabian.com.instagramclone2.Utils.FirebaseMethods;
 import tabian.com.instagramclone2.Utils.GridImageAdapter;
+import tabian.com.instagramclone2.Utils.SwipePic;
 import tabian.com.instagramclone2.Utils.UniversalImageLoader;
-import tabian.com.instagramclone2.Utils.photonew;
-import tabian.com.instagramclone2.models.Like;
-import tabian.com.instagramclone2.models.Photo;
 import tabian.com.instagramclone2.models.UserAccountSettings;
 import tabian.com.instagramclone2.models.UserSettings;
 
@@ -141,8 +125,11 @@ public class ProfileFragment extends Fragment
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                //show in fullscreen
-                mOnGridImageSelectedListener.onGridImageSelected(photos.get(position), ACTIVITY_NUM);
+                Intent intent = new Intent(getContext(), SwipePic.class);
+                intent.putStringArrayListExtra("urls",photos);
+                intent.putExtra("id",idurl);
+                intent.putExtra("position",position);
+                startActivity(intent);
             }
         });
     }

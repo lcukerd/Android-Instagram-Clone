@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Utils.MainActivity"
+            android:name=".Utils.SwipePic"
             android:configChanges="keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme"/>
         <activity android:name=".Likes.LikesActivity"/>

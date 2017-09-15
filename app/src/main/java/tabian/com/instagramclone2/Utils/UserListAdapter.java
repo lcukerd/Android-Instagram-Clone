@@ -87,7 +87,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                     @Override
                     public void onCompleted(Exception e, String result)
                     {
-                        ArrayList<String> urls = new ArrayList<>();
+                        try
+                        {
+                            ArrayList<String> urls = new ArrayList<>();
                         String id = "";
                         int pos=0;
                         for (int i=0;i<12;i++)
@@ -113,6 +115,15 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                         intent.putStringArrayListExtra("urls",urls);
                         intent.putExtra("id",id);
                         mContext.startActivity(intent);
+                    } catch (NullPointerException ne)
+                    {
+                        Toast.makeText(mContext, "Internet Not Working", Toast.LENGTH_SHORT).show();
+                        Log.e("User List Adapter", "Internet not working", ne);
+                    } catch (StringIndexOutOfBoundsException finished)
+                    {
+                        Toast.makeText(mContext, "No More posts", Toast.LENGTH_SHORT).show();
+                        Log.d("User List Adapter", "No more posts", e);
+                    }
                     }
                 });
 
