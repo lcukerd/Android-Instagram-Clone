@@ -26,15 +26,6 @@
                     android:layout_marginStart="15dp"
                     android:id="@+id/username"/>
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="20dp"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/profileMenu"
-                    android:src="@drawable/ic_ellipses"/>
-
             </RelativeLayout>
 
 

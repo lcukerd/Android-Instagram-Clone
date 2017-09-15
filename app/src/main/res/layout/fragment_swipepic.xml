@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:id="@+id/showpicl"
-              tools:context="tabian.com.instagramclone2.Utils.SwipePic$PlaceholderFragment">
+              tools:context="lcukerd.com.instaswipe.SwipePic$PlaceholderFragment">
 
     <ImageView
         android:id="@+id/imageView"

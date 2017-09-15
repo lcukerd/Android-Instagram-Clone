@@ -53,7 +53,7 @@
 
             </RelativeLayout>
 
-            <tabian.com.instagramclone2.Utils.SquareImageView
+            <lcukerd.com.instaswipe.Utils.SquareImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_image"
