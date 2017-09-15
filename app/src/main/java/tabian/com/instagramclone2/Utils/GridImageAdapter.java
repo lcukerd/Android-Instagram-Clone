@@ -3,6 +3,7 @@ package tabian.com.instagramclone2.Utils;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -11,7 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -37,7 +44,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
     private ArrayList<String> imgURLs;
     private String idurl;
 
-    public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs,String id)
+    public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs, String id)
     {
         super(context, layoutResource, imgURLs);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -59,9 +66,9 @@ public class GridImageAdapter extends ArrayAdapter<String>
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
     {
         final ViewHolder holder;
-        if (imgURLs.size()== position+1)
+        if (imgURLs.size() - 4 == position + 1)
         {
-            Log.d(tag,"end reached");
+            Log.d(tag, "end reached");
             loadmore();
         }
         if (convertView == null)
@@ -79,8 +86,32 @@ public class GridImageAdapter extends ArrayAdapter<String>
 
         String imgURL = getItem(position);
 
-        ImageLoader imageLoader = ImageLoader.getInstance();
+        Glide.with(mContext)
+                .load(imgURL)
+                .listener(new RequestListener<Drawable>()
+                {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                Target<Drawable> target, boolean isFirstResource)
+                    {
+                        return false;
+                    }
 
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model,
+                                                   Target<Drawable> target, DataSource dataSource,
+                                                   boolean isFirstResource)
+                    {
+                        if (holder.mProgressBar != null)
+                        {
+                            holder.mProgressBar.setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+                })
+                .into(holder.image);
+        /*
+        ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.displayImage(imgURL, holder.image, new ImageLoadingListener()
         {
             @Override
@@ -119,9 +150,10 @@ public class GridImageAdapter extends ArrayAdapter<String>
                 }
             }
         });
-
+*/
         return convertView;
     }
+
     private void loadmore()
     {
         Ion.with(mContext).load(idurl).asString().setCallback(new FutureCallback<String>()
@@ -130,23 +162,36 @@ public class GridImageAdapter extends ArrayAdapter<String>
             public void onCompleted(Exception e, String result)
             {
                 String id = "";
-                int pos=0;
-                for (int i=0;i<12;i++)
+                int pos = 0;
+                for (int i = 0; i < 12; i++)
                 {
-                    String url = result.substring(result.indexOf("thumbnail_src",pos) + 17,
-                            result.indexOf ("\",",result.indexOf("thumbnail_src",pos)) );
-                    url.replace("s640x640","s360x360");
-                    imgURLs.add(url);
-                    Log.d(tag,url);
-                    if (i==11)
-                    {                               //fails if last element is video "view-source:https://www.instagram.com/officialpiperblush/?max_id=1379842223931348404"
-                        int start = result.indexOf("\"GraphImage\", \"id\"",pos);
-                        int end = result.indexOf("\",",result.indexOf("\"GraphImage\", \"id\"",pos)+21);
-                        id = result.substring(start + 21,end);
-                        idurl = idurl.substring(0,idurl.indexOf('=')+1) + id;
-                        Log.d(tag,idurl);
+                    try
+                    {
+                        String url = result.substring(result.indexOf("thumbnail_src", pos) + 17,
+                                result.indexOf("\",", result.indexOf("thumbnail_src", pos)));
+                        url.replace("s640x640", "s360x360");
+                        imgURLs.add(url);
+                        Log.d(tag, url);
+                        if (i == 11)
+                        {
+                            int start = result.indexOf("\"GraphImage\", \"id\"", pos);
+                            if (start == -1)
+                                start = result.indexOf("\"GraphVideo\", \"id\"", pos);
+                            int end = result.indexOf("\",", start + 21);
+                            id = result.substring(start + 21, end);
+                            idurl = idurl.substring(0, idurl.indexOf('=') + 1) + id;
+                            Log.d(tag, idurl);
+                        }
+                        pos = result.indexOf("\",", result.indexOf("thumbnail_src", pos));
+                    } catch (NullPointerException ne)
+                    {
+                        Toast.makeText(mContext, "Internet Not Working", Toast.LENGTH_SHORT).show();
+                        Log.e(tag, "Internet not working", ne);
+                    } catch (StringIndexOutOfBoundsException finished)
+                    {
+                        Toast.makeText(mContext, "No More posts", Toast.LENGTH_SHORT).show();
+                        Log.d(tag, "No more posts", e);
                     }
-                    pos = result.indexOf ("\",",result.indexOf("thumbnail_src",pos)) ;
                 }
             }
         });

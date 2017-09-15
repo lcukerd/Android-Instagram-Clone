@@ -42,6 +42,8 @@ dependencies {
     //firebase storage
     compile 'com.google.firebase:firebase-storage:10.2.6'
     compile 'com.koushikdutta.ion:ion:2.2.1'
+    compile 'com.github.bumptech.glide:glide:4.1.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.1.1'
 }
 
 //Firebase

@@ -100,6 +100,8 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                             if (i==11)
                             {
                                 int start = result.indexOf("\"GraphImage\", \"id\"",pos);
+                                if (start == -1)
+                                    start = result.indexOf("\"GraphVideo\", \"id\"",pos);
                                 int end = result.indexOf("\",",result.indexOf("\"GraphImage\", \"id\"",pos)+21);
                                 id = result.substring(start + 21,end);
                                 id = "https://www.instagram.com/" + u.query + "/?max_id=" + id;
