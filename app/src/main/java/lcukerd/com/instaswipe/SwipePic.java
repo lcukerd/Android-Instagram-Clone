@@ -1,6 +1,7 @@
 package lcukerd.com.instaswipe;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -17,7 +18,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.afollestad.easyvideoplayer.EasyVideoCallback;
+import com.afollestad.easyvideoplayer.EasyVideoPlayer;
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -67,10 +72,11 @@ public class SwipePic extends AppCompatActivity
         return false;
     }
 
-    public static class PlaceholderFragment extends Fragment
+    public static class PlaceholderFragment extends Fragment /*implements EasyVideoCallback*/
     {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private boolean wait = false;
+//        private EasyVideoPlayer player;
 
         public PlaceholderFragment()
         {
@@ -89,10 +95,15 @@ public class SwipePic extends AppCompatActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View rootView = inflater.inflate(R.layout.fragment_swipepic, container, false);
-            ImageView pic = (ImageView) rootView.findViewById(R.id.imageView);
+            PhotoView pic = (PhotoView) rootView.findViewById(R.id.imageView);
+/*            player = (EasyVideoPlayer) rootView.findViewById(R.id.player);
+            player.setVisibility(View.VISIBLE);
+            player.setSource(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));*/
+
             Glide.with(getActivity())
                     .load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER) - 1))
                     .into(pic);
+
             if (urlid.equals("-1") == false)
             {
                 if (wait == false)
@@ -159,6 +170,70 @@ public class SwipePic extends AppCompatActivity
             urls.addAll(temp);
             Log.i(tag, urlid);
         }
+
+/*        @Override
+        public void onPause()
+        {
+            super.onPause();
+            // Make sure the player stops playing if the user presses the home button.
+            player.pause();
+        }
+
+        // Methods for the implemented EasyVideoCallback
+
+        @Override
+        public void onPreparing(EasyVideoPlayer player)
+        {
+            // TODO handle if needed
+        }
+
+        @Override
+        public void onPrepared(EasyVideoPlayer player)
+        {
+            // TODO handle
+        }
+
+        @Override
+        public void onBuffering(int percent)
+        {
+            // TODO handle if needed
+        }
+
+        @Override
+        public void onError(EasyVideoPlayer player, Exception e)
+        {
+            // TODO handle
+        }
+
+        @Override
+        public void onCompletion(EasyVideoPlayer player)
+        {
+            // TODO handle if needed
+        }
+
+        @Override
+        public void onRetry(EasyVideoPlayer player, Uri source)
+        {
+            // TODO handle if used
+        }
+
+        @Override
+        public void onSubmit(EasyVideoPlayer player, Uri source)
+        {
+            // TODO handle if used
+        }
+
+        @Override
+        public void onStarted(EasyVideoPlayer player)
+        {
+            // TODO handle if needed
+        }
+
+        @Override
+        public void onPaused(EasyVideoPlayer player)
+        {
+                // TODO handle if needed
+        }*/
 
     }
 

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +23,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class SearchActivity extends AppCompatActivity
     private ArrayList<user> usersArrayList;
     private UserListAdapter adapter;
     private DbInteract interact;
+    private ProgressBar progressBar;
 
     private Context mContext = SearchActivity.this;
 
@@ -61,11 +64,12 @@ public class SearchActivity extends AppCompatActivity
         findViewById(R.id.relLayout1).setVisibility(View.GONE);
 
         userlist = (RecyclerView) findViewById(R.id.recycler_users);
+        progressBar = (ProgressBar) findViewById(R.id.searchProgressBar);
         userlist.setVisibility(View.VISIBLE);
         usersArrayList = new ArrayList<>();
         usersArrayList.addAll(interact.readfromDB());
 
-        adapter = new UserListAdapter(usersArrayList, this);
+        adapter = new UserListAdapter(usersArrayList, this,progressBar);
         userlist.setLayoutManager(new LinearLayoutManager(this));
         userlist.setAdapter(adapter);
 
@@ -82,7 +86,7 @@ public class SearchActivity extends AppCompatActivity
         searchView.setBackground(getResources().getDrawable(R.drawable.et_border));
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setTextColor(Color.BLACK);
-        searchAutoComplete.setHint("Search");
+        searchAutoComplete.setHint("Write full username");
         searchAutoComplete.setHintTextColor(Color.GRAY);
         MenuItemCompat.setShowAsAction(searchIcon, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
         MenuItemCompat.setActionView(searchIcon, searchView);
@@ -95,6 +99,7 @@ public class SearchActivity extends AppCompatActivity
             {
                 Log.d(TAG, "Search Text " + query);
                 adapter.clear();
+                progressBar.setVisibility(View.VISIBLE);
                 Ion.with(getApplicationContext()).load("https://www.instagram.com/" + query + "/").asString().setCallback(new FutureCallback<String>()
                 {
                     @Override
@@ -102,6 +107,7 @@ public class SearchActivity extends AppCompatActivity
                     {
                         adapter.clear();
                         ImageLoader imageLoader = ImageLoader.getInstance();
+                        imageLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
                         try
                         {
                             final String username = Scrapper.getUsername(result);
@@ -111,6 +117,7 @@ public class SearchActivity extends AppCompatActivity
                                 @Override
                                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
                                 {
+                                    progressBar.setVisibility(View.GONE);
                                     adapter.add(new user(loadedImage, username, url,query));
                                 }
                             });

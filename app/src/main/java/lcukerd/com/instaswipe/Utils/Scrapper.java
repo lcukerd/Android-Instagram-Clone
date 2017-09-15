@@ -33,11 +33,17 @@ public class Scrapper
 
     public static String getnextpageID(String result, int pos)
     {
+        int index = 21;
         int start = result.indexOf("\"GraphImage\", \"id\"", pos);
         if (start == -1)
             start = result.indexOf("\"GraphVideo\", \"id\"", pos);
+        if (start == -1)
+        {
+            index+=2;
+            start = result.indexOf("\"GraphSidecar\", \"id\"", pos);
+        }
         int end = result.indexOf("\",", start + 21);
-        return result.substring(start + 21, end);
+        return result.substring(start + index, end);
     }
 
     public static String formatURLforfullscreen(String tempurl)

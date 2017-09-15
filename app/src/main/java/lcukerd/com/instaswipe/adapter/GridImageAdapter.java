@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import lcukerd.com.instaswipe.R;
 import lcukerd.com.instaswipe.SwipePic;
+import lcukerd.com.instaswipe.Utils.Scrapper;
 import lcukerd.com.instaswipe.Utils.SquareImageView;
 
 /**
@@ -40,6 +41,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
     private String mAppend;
     private ArrayList<String> imgURLs;
     private String idurl;
+    boolean wait = false;
 
     public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs, String id)
     {
@@ -63,10 +65,11 @@ public class GridImageAdapter extends ArrayAdapter<String>
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent)
     {
         final ViewHolder holder;
-        if (imgURLs.size() - 4 == position + 1)
+        if (imgURLs.size() - 4 <= position + 1)
         {
             Log.d(tag, "end reached");
-            loadmore();
+            if (wait == false)
+                loadmore();
         }
         if (convertView == null)
         {
@@ -124,6 +127,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
 
     private void loadmore()
     {
+        wait = true;
         Ion.with(mContext).load(idurl).asString().setCallback(new FutureCallback<String>()
         {
             @Override
@@ -135,18 +139,13 @@ public class GridImageAdapter extends ArrayAdapter<String>
                 {
                     try
                     {
-                        String url = result.substring(result.indexOf("thumbnail_src", pos) + 17,
-                                result.indexOf("\",", result.indexOf("thumbnail_src", pos)));
+                        String url = Scrapper.getimageUrl(result,pos);
                         url.replace("s640x640", "s360x360");
                         imgURLs.add(url);
                         Log.d(tag, url);
                         if (i == 11)
                         {
-                            int start = result.indexOf("\"GraphImage\", \"id\"", pos);
-                            if (start == -1)
-                                start = result.indexOf("\"GraphVideo\", \"id\"", pos);
-                            int end = result.indexOf("\",", start + 21);
-                            id = result.substring(start + 21, end);
+                            id = Scrapper.getnextpageID(result,pos);
                             idurl = idurl.substring(0, idurl.indexOf('=') + 1) + id;
                             Log.d(tag, idurl);
                         }
@@ -155,12 +154,14 @@ public class GridImageAdapter extends ArrayAdapter<String>
                     {
                         Toast.makeText(mContext, "Internet Not Working", Toast.LENGTH_SHORT).show();
                         Log.e(tag, "Internet not working", ne);
-                    } catch (StringIndexOutOfBoundsException finished)
+                    } /*catch (StringIndexOutOfBoundsException finished)
                     {
                         Toast.makeText(mContext, "No More posts", Toast.LENGTH_SHORT).show();
                         Log.d(tag, "No more posts", e);
-                    }
+                    }*/
                 }
+                notifyDataSetChanged();
+                wait = false;
             }
         });
     }

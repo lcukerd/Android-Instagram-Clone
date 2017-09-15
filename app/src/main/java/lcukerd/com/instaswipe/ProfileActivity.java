@@ -94,7 +94,6 @@ public class ProfileActivity extends AppCompatActivity
 
     }
 
-
     private void setProfileWidgets()
     {
         final AccountDetails account = new AccountDetails(Scrapper.getFollowers(sourceCode),

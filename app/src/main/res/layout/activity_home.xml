@@ -40,6 +40,14 @@
 
         </RelativeLayout>
 
+        <ProgressBar
+            android:id="@+id/searchProgressBar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:layout_marginTop="100dp"/>
+
 
         <!-- bottom navigation -->
         <include layout="@layout/layout_bottom_navigation_view"/>

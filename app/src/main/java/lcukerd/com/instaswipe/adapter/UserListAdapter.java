@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,14 +46,16 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
     private Context mContext;
     private DisplayMetrics metrics;
     private DbInteract interact;
+    private ProgressBar progressBar;
 
-    public UserListAdapter(ArrayList<user> eventArray, Context context)
+    public UserListAdapter(ArrayList<user> eventArray, Context context,ProgressBar progressBar)
     {
         inflater = LayoutInflater.from(context);
         userArrayList = eventArray;
         mContext = context;
         interact = new DbInteract(context);
         metrics = context.getResources().getDisplayMetrics();
+        this.progressBar = progressBar;
     }
 
     @Override
@@ -81,6 +84,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
             @Override
             public void onClick(View v)
             {
+                progressBar.setVisibility(View.VISIBLE);
                 Ion.with(mContext).load("https://www.instagram.com/" + u.query + "/").asString().setCallback(new FutureCallback<String>()
                 {
                     @Override
@@ -114,6 +118,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                             intent.putExtra("profile pic",interact.getBitmapAsByteArray(u.profile));
                             intent.putExtra("profile pic url",u.url);
                             intent.putExtra("source", result);
+                            progressBar.setVisibility(View.GONE);
                             mContext.startActivity(intent);
                         } catch (NullPointerException ne)
                         {
