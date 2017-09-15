@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -63,7 +64,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent)
     {
         final ViewHolder holder;
         if (imgURLs.size() - 4 == position + 1)
@@ -110,47 +111,18 @@ public class GridImageAdapter extends ArrayAdapter<String>
                     }
                 })
                 .into(holder.image);
-        /*
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage(imgURL, holder.image, new ImageLoadingListener()
+        convertView.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onLoadingStarted(String imageUri, View view)
+            public void onClick(View v)
             {
-                if (holder.mProgressBar != null)
-                {
-                    holder.mProgressBar.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason)
-            {
-                if (holder.mProgressBar != null)
-                {
-                    holder.mProgressBar.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
-            {
-                if (holder.mProgressBar != null)
-                {
-                    holder.mProgressBar.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view)
-            {
-                if (holder.mProgressBar != null)
-                {
-                    holder.mProgressBar.setVisibility(View.GONE);
-                }
+                Intent intent = new Intent(mContext, SwipePic.class);
+                intent.putStringArrayListExtra("urls",imgURLs);
+                intent.putExtra("id",idurl);
+                intent.putExtra("position",position);
+                mContext.startActivity(intent);
             }
         });
-*/
         return convertView;
     }
 

@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".Utils.SwipePic"
-            android:configChanges="keyboardHidden|screenSize"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme"/>
         <activity android:name=".Likes.LikesActivity"/>
         <activity android:name=".Profile.ProfileActivity"/>

@@ -55,14 +55,14 @@ public class SwipePic extends AppCompatActivity
         Intent intent = getIntent();
         urlid = intent.getStringExtra("id");
         urls = intent.getStringArrayListExtra("urls");
-        PlaceholderFragment.formaturls(0,urls.size());
+        PlaceholderFragment.formaturls(0, urls.size());
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        Log.d(tag,String.valueOf(intent.getIntExtra("position",0)));
-        mViewPager.setCurrentItem(intent.getIntExtra("position",0));
+        Log.d(tag, String.valueOf(intent.getIntExtra("position", 0)));
+        mViewPager.setCurrentItem(intent.getIntExtra("position", 0));
     }
 
 
@@ -97,31 +97,35 @@ public class SwipePic extends AppCompatActivity
             View rootView = inflater.inflate(R.layout.fragment_swipepic, container, false);
             ImageView pic = (ImageView) rootView.findViewById(R.id.imageView);
             Glide.with(getActivity())
-                .load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER)-1))
-                .into(pic);
-            if (wait==false)
+                    .load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER) - 1))
+                    .into(pic);
+            if (wait == false)
             {
                 if (getArguments().getInt(ARG_SECTION_NUMBER) == urls.size() - 2)
                     addurls();
             }
+            Log.d(tag,String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
+
         private void addurls()
         {
             wait = true;
+            Log.i(tag,"id: "+urlid);
             Ion.with(this).load(urlid).asString().setCallback(new FutureCallback<String>()
             {
                 @Override
                 public void onCompleted(Exception e, String result)
                 {
-                    String id = "";
-                    int pos = 0;
-                    for (int i = 0; i < 12; i++)
+                    try
                     {
-                        try
+                        String id = "";
+                        int pos = 0;
+                        for (int i = 0; i < 12; i++)
                         {
                             String url = result.substring(result.indexOf("thumbnail_src", pos) + 17,
                                     result.indexOf("\",", result.indexOf("thumbnail_src", pos)));
+                            Log.i(tag, "add url: " + url);
                             urls.add(url);
                             if (i == 11)
                             {
@@ -133,49 +137,44 @@ public class SwipePic extends AppCompatActivity
                                 urlid = urlid.substring(0, urlid.indexOf('=') + 1) + id;
                             }
                             pos = result.indexOf("\",", result.indexOf("thumbnail_src", pos));
-                            formaturls(urls.size()-13,urls.size());
-                            mSectionsPagerAdapter.notifyDataSetChanged();
-                        } catch (NullPointerException ne)
-                        {
-                            Toast.makeText(getContext(), "Internet Not Working", Toast.LENGTH_SHORT).show();
-                            Log.e(tag, "Internet not working", ne);
-                        } catch (StringIndexOutOfBoundsException finished)
-                        {
-                            Toast.makeText(getContext(), "No More posts", Toast.LENGTH_SHORT).show();
-                            Log.d(tag, "No more posts", e);
                         }
+                    } catch (NullPointerException ne)
+                    {
+                        Toast.makeText(getContext(), "Internet Not Working", Toast.LENGTH_SHORT).show();
+                        Log.e(tag, "Internet not working", ne);
+                    } catch (StringIndexOutOfBoundsException finished)
+                    {
+                        Toast.makeText(getContext(), "No More posts", Toast.LENGTH_SHORT).show();
+                        Log.i(tag, "No more posts", e);
                     }
+                    formaturls(urls.size() - 12, urls.size());
+                    mSectionsPagerAdapter.notifyDataSetChanged();
                     wait = false;
                 }
             });
         }
 
-        private static void formaturls(int start,int end)
+        private static void formaturls(int start, int end)
         {
-            try
+            ArrayList<String> temp = new ArrayList<>();
+            for (int i = start; i < end; i++)
             {
-                ArrayList<String> temp = new ArrayList<>();
-                for (int i = start; i < end; i++)
-                {
-                    String tempurl = urls.get(start);
-                    int istart = tempurl.indexOf("s640x640/", 0);
-                    if (istart == -1)
-                        istart = tempurl.indexOf("s360x360/", 0);
-                    if (istart == -1)
-                        istart = tempurl.indexOf("/e35", 0);
-                    int iend = tempurl.lastIndexOf('/');
-                    tempurl = tempurl.substring(0, istart) + tempurl.substring(iend);
-                    temp.add(tempurl);
-                    urls.remove(start);
-                    Log.d(tag, tempurl);
-                }
-                urls.addAll(temp);
-                Log.d(tag, urlid);
+                String tempurl = urls.get(start);
+                int istart = tempurl.indexOf("s640x640/", 0);
+                if (istart == -1)
+                    istart = tempurl.indexOf("s360x360/", 0);
+                if (istart == -1)
+                    istart = tempurl.indexOf("/e", 0);
+                int iend = tempurl.lastIndexOf('/');
+                Log.i(tag, String.valueOf(istart) + " " + String.valueOf(iend) + " "
+                        + String.valueOf(i) + " " + String.valueOf(urls.size()) + " " + tempurl);
+                tempurl = tempurl.substring(0, istart) + tempurl.substring(iend);
+                temp.add(tempurl);
+                urls.remove(start);
+                Log.i(tag, tempurl);
             }
-            catch (StringIndexOutOfBoundsException e)
-            {
-                Log.d(tag,"screen rotated");
-            }
+            urls.addAll(temp);
+            Log.i(tag, urlid);
         }
 
     }
