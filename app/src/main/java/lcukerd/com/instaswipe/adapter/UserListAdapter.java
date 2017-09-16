@@ -97,19 +97,27 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                             int pos = 0;
                             for (int i = 0; i < 12; i++)
                             {
-                                String url = Scrapper.getimageUrl(result,pos);
-
-                                url.replace("s640x640", "s360x360");
-
-                                urls.add(url);
-                                Log.d(LOG_TAG, url);
-                                if (i == 11)
+                                String url = Scrapper.getimageUrl(result, pos);
+                                if (url.equals("private"))
                                 {
-                                    id = Scrapper.getnextpageID(result,pos);
-                                    id = "https://www.instagram.com/" + u.query + "/?max_id=" + id;
-                                    Log.d(LOG_TAG, id);
+                                    Toast.makeText(mContext, "Account is private", Toast.LENGTH_SHORT).show();
+                                    break;
                                 }
-                                pos = result.indexOf("\",", result.indexOf("thumbnail_src", pos));
+                                else
+                                {
+
+                                    url.replace("s640x640", "s360x360");
+
+                                    urls.add(url);
+                                    Log.d(LOG_TAG, url);
+                                    if (i == 11)
+                                    {
+                                        id = Scrapper.getnextpageID(result, pos);
+                                        id = "https://www.instagram.com/" + u.query + "/?max_id=" + id;
+                                        Log.d(LOG_TAG, id);
+                                    }
+                                    pos = result.indexOf("\",", result.indexOf("thumbnail_src", pos));
+                                }
                             }
                             Intent intent = new Intent(mContext, ProfileActivity.class);
                             intent.putStringArrayListExtra("urls", urls);

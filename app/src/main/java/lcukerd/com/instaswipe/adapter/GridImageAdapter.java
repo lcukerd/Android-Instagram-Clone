@@ -57,6 +57,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
     private static class ViewHolder
     {
         SquareImageView image;
+        SquareImageView showifvideo;
         ProgressBar mProgressBar;
     }
 
@@ -77,6 +78,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
             holder = new ViewHolder();
             holder.mProgressBar = (ProgressBar) convertView.findViewById(R.id.gridImageProgressbar);
             holder.image = (SquareImageView) convertView.findViewById(R.id.gridImageView);
+            holder.showifvideo = (SquareImageView) convertView.findViewById(R.id.videoicon);
 
             convertView.setTag(holder);
         } else
@@ -86,39 +88,71 @@ public class GridImageAdapter extends ArrayAdapter<String>
 
         String imgURL = getItem(position);
 
-        Glide.with(mContext)
-                .load(imgURL)
-                .listener(new RequestListener<Drawable>()
-                {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                Target<Drawable> target, boolean isFirstResource)
+        if (imgURL.charAt(0) == 'v')
+        {
+            holder.showifvideo.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(imgURL.substring(imgURL.indexOf('@')+1))
+                    .listener(new RequestListener<Drawable>()
                     {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model,
-                                                   Target<Drawable> target, DataSource dataSource,
-                                                   boolean isFirstResource)
-                    {
-                        if (holder.mProgressBar != null)
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                    Target<Drawable> target, boolean isFirstResource)
                         {
-                            holder.mProgressBar.setVisibility(View.GONE);
+                            return false;
                         }
-                        return false;
-                    }
-                })
-                .into(holder.image);
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model,
+                                                       Target<Drawable> target, DataSource dataSource,
+                                                       boolean isFirstResource)
+                        {
+                            if (holder.mProgressBar != null)
+                            {
+                                holder.mProgressBar.setVisibility(View.GONE);
+                            }
+                            return false;
+                        }
+                    })
+                    .into(holder.image);
+        }
+        else
+        {
+            holder.showifvideo.setVisibility(View.GONE);
+            Glide.with(mContext)
+                    .load(imgURL)
+                    .listener(new RequestListener<Drawable>()
+                    {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                    Target<Drawable> target, boolean isFirstResource)
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model,
+                                                       Target<Drawable> target, DataSource dataSource,
+                                                       boolean isFirstResource)
+                        {
+                            if (holder.mProgressBar != null)
+                            {
+                                holder.mProgressBar.setVisibility(View.GONE);
+                            }
+                            return false;
+                        }
+                    })
+                    .into(holder.image);
+        }
         convertView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 Intent intent = new Intent(mContext, SwipePic.class);
-                intent.putStringArrayListExtra("urls",imgURLs);
-                intent.putExtra("id",idurl);
-                intent.putExtra("position",position);
+                intent.putStringArrayListExtra("urls", imgURLs);
+                intent.putExtra("id", idurl);
+                intent.putExtra("position", position);
                 mContext.startActivity(intent);
             }
         });
@@ -139,13 +173,13 @@ public class GridImageAdapter extends ArrayAdapter<String>
                 {
                     try
                     {
-                        String url = Scrapper.getimageUrl(result,pos);
+                        String url = Scrapper.getimageUrl(result, pos);
                         url.replace("s640x640", "s360x360");
                         imgURLs.add(url);
                         Log.d(tag, url);
                         if (i == 11)
                         {
-                            id = Scrapper.getnextpageID(result,pos);
+                            id = Scrapper.getnextpageID(result, pos);
                             idurl = idurl.substring(0, idurl.indexOf('=') + 1) + id;
                             Log.d(tag, idurl);
                         }

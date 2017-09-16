@@ -11,7 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/relLayout2"
+            android:layout_below="@+id/relLayout1">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_users"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
+            <include layout="@layout/layout_center_viewpager"
+                     android:visibility="gone"/>
+
+
+        </RelativeLayout>
         <!-- top toolbar -->
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,22 +39,7 @@
         </RelativeLayout>
 
         <!-- Middle section (body) -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/relLayout2"
-            android:layout_below="@+id/relLayout1">
 
-            <include layout="@layout/layout_center_viewpager"/>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_users"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                />
-
-
-        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/searchProgressBar"

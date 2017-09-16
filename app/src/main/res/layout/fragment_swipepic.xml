@@ -3,19 +3,28 @@
               android:id="@+id/showpicl"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:orientation="horizontal"
               tools:context="lcukerd.com.instaswipe.SwipePic$PlaceholderFragment">
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/imageView"
         style="?metaButtonBarButtonStyle"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <!--<com.afollestad.easyvideoplayer.EasyVideoPlayer
+    <com.afollestad.easyvideoplayer.EasyVideoPlayer
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/player"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>-->
+        android:layout_height="match_parent"/>
+    <ProgressBar
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/swipepicProgressBar"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"/>
 
 </LinearLayout>

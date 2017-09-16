@@ -1,7 +1,9 @@
 package lcukerd.com.instaswipe;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -16,11 +18,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.afollestad.easyvideoplayer.EasyVideoCallback;
 import com.afollestad.easyvideoplayer.EasyVideoPlayer;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.koushikdutta.async.future.FutureCallback;
@@ -72,11 +79,12 @@ public class SwipePic extends AppCompatActivity
         return false;
     }
 
-    public static class PlaceholderFragment extends Fragment /*implements EasyVideoCallback*/
+    public static class PlaceholderFragment extends Fragment implements EasyVideoCallback
     {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private boolean wait = false;
-//        private EasyVideoPlayer player;
+        private EasyVideoPlayer player;
+        private ProgressBar progressBar;
 
         public PlaceholderFragment()
         {
@@ -96,14 +104,80 @@ public class SwipePic extends AppCompatActivity
         {
             View rootView = inflater.inflate(R.layout.fragment_swipepic, container, false);
             PhotoView pic = (PhotoView) rootView.findViewById(R.id.imageView);
-/*            player = (EasyVideoPlayer) rootView.findViewById(R.id.player);
-            player.setVisibility(View.VISIBLE);
-            player.setSource(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));*/
+            player = (EasyVideoPlayer) rootView.findViewById(R.id.player);
+            progressBar = (ProgressBar) rootView.findViewById(R.id.swipepicProgressBar);
 
-            Glide.with(getActivity())
-                    .load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER) - 1))
-                    .into(pic);
+            final int pos = getArguments().getInt(ARG_SECTION_NUMBER) - 1;
+            final String url = urls.get(pos);
 
+            if (url.charAt(0)=='v')
+            {
+                progressBar.setVisibility(View.VISIBLE);
+                player.setVisibility(View.VISIBLE);
+                player.setCallback(this);
+
+                String code = url.substring(1,url.indexOf('@'));
+                String videoPageUrl = Scrapper.getVideoPageUrl(code,urlid);
+
+                Ion.with(getContext()).load(videoPageUrl).asString().setCallback(new FutureCallback<String>()
+                {
+                    @Override
+                    public void onCompleted(Exception e, String result)
+                    {
+                        try
+                        {
+                            String videoUrl = Scrapper.getVideoUrl(result);
+
+                            urls.remove(url);
+                            urls.add(pos, "@" + videoUrl);
+
+                            player.setSource(Uri.parse(videoUrl));
+                        }
+                        catch (NullPointerException el)
+                        {
+                            Toast.makeText(getContext(), "Intenet not working!", Toast.LENGTH_SHORT).show();
+                            Log.d(tag,"Internet not working");
+                        }
+                    }
+                });
+
+            }
+            else if (url.charAt(0)=='@')
+            {
+                player.setVisibility(View.VISIBLE);
+                player.setCallback(this);
+                player.setSource(Uri.parse(url.substring(1)));
+            }
+            else
+            {
+                pic.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                Glide.with(getActivity())
+                        .load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER) - 1))
+                        .listener(new RequestListener<Drawable>()
+                        {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                        Target<Drawable> target, boolean isFirstResource)
+                            {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model,
+                                                           Target<Drawable> target, DataSource dataSource,
+                                                           boolean isFirstResource)
+                            {
+                                if (progressBar != null)
+                                {
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                                return false;
+                            }
+                        })
+                        .into(pic);
+
+            }
             if (urlid.equals("-1") == false)
             {
                 if (wait == false)
@@ -171,9 +245,10 @@ public class SwipePic extends AppCompatActivity
             Log.i(tag, urlid);
         }
 
-/*        @Override
+        @Override
         public void onPause()
         {
+            Log.d(tag,"paused");
             super.onPause();
             // Make sure the player stops playing if the user presses the home button.
             player.pause();
@@ -184,13 +259,13 @@ public class SwipePic extends AppCompatActivity
         @Override
         public void onPreparing(EasyVideoPlayer player)
         {
-            // TODO handle if needed
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onPrepared(EasyVideoPlayer player)
         {
-            // TODO handle
+            progressBar.setVisibility(View.GONE);
         }
 
         @Override
@@ -233,7 +308,7 @@ public class SwipePic extends AppCompatActivity
         public void onPaused(EasyVideoPlayer player)
         {
                 // TODO handle if needed
-        }*/
+        }
 
     }
 

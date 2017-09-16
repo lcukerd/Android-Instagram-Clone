@@ -1,9 +1,11 @@
+<h1>InstaSwipe</h1>
+
 Originally, this project is a "clone of Instagram" made using Firebase(auth,data etc) owned by Mitch Tabian. I am editing/have edited the source code to make it retrieve real Instagram data and show in the pre-built UI of this project. Few pieces of UI here are made by me. I am not using Instagram API, because I might never get accepted to access data out of sandbox API, therefore I am trying to retrieve data from source code of Instagram's web pages.
 This app will show pic and video in fullscreen mode and will allow to swipe to get to next pic. It might not seem much but will be heaven for some.
 
-APK Download Link:
+<h2>APK Download Link:</h2>
 
-Original Developers ReadMe ahead:
+<h3>Original Developers ReadMe ahead:</h3>
 <img class='header-img' src='https://s3.amazonaws.com/codingwithmitch-static-and-media/media/instagram-clone/images/Instagram.png' />
 
 <h1>Android Instagram Clone Course</h1>
