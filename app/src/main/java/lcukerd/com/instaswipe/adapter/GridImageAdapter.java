@@ -41,7 +41,8 @@ public class GridImageAdapter extends ArrayAdapter<String>
     private String mAppend;
     private ArrayList<String> imgURLs;
     private String idurl;
-    boolean wait = false;
+    private boolean wait = false ,nomoreposts = false;
+
 
     public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs, String id)
     {
@@ -69,7 +70,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
         if (imgURLs.size() - 4 <= position + 1)
         {
             Log.d(tag, "end reached");
-            if (wait == false)
+            if ((wait == false)&&(nomoreposts == false))
                 loadmore();
         }
         if (convertView == null)
@@ -188,11 +189,12 @@ public class GridImageAdapter extends ArrayAdapter<String>
                     {
                         Toast.makeText(mContext, "Internet Not Working", Toast.LENGTH_SHORT).show();
                         Log.e(tag, "Internet not working", ne);
-                    } /*catch (StringIndexOutOfBoundsException finished)
+                    } catch (StringIndexOutOfBoundsException finished)
                     {
                         Toast.makeText(mContext, "No More posts", Toast.LENGTH_SHORT).show();
+                        nomoreposts = true;
                         Log.d(tag, "No more posts", e);
-                    }*/
+                    }
                 }
                 notifyDataSetChanged();
                 wait = false;

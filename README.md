@@ -6,7 +6,7 @@ This app will show pic and video in fullscreen mode and will allow to swipe to g
 <h4>Features:</h4>
 <ul>
 <li>View videos/images in fullscreen with swipe(to get to next) and zoom(for image only) feature. </li>
-<li>Can view profile pic in full screen as well.<li>
+<li>Can view profile pic in full screen as well.</li>
 <li>Browse public accounts incognito (no need to signin).</li>
 <li>Images once loaded, will reopen with little to no internet requirement (If you move to "low speed zone").</li>
 </ul>
