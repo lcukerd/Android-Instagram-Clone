@@ -73,6 +73,8 @@ public class Scrapper
             istart = tempurl.indexOf("s150x150/", 0);
         if (istart == -1)
             istart = tempurl.indexOf("/e", 0);
+        if (istart == -1)
+            return tempurl;
 
         int iend = tempurl.lastIndexOf('/');
 
