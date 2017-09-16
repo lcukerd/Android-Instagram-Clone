@@ -3,7 +3,29 @@
 Originally, this project is a "clone of Instagram" made using Firebase(auth,data etc) owned by Mitch Tabian. I am editing/have edited the source code to make it retrieve real Instagram data and show in the pre-built UI of this project. Few pieces of UI here are made by me. I am not using Instagram API, because I might never get accepted to access data out of sandbox API, therefore I am trying to retrieve data from source code of Instagram's web pages.
 This app will show pic and video in fullscreen mode and will allow to swipe to get to next pic. It might not seem much but will be heaven for some.
 
-<h2>APK Download Link:</h2>
+<h4>Features:</h4>
+<ul>
+<li>View videos/images in fullscreen with swipe(to get to next) and zoom(for image only) feature. </li>
+<li>Can view profile pic in full screen as well.<li>
+<li>Browse public accounts incognito (no need to signin).</li>
+<li>Images once loaded, will reopen with little to no internet requirement (If you move to "low speed zone").</li>
+</ul>
+
+<h4>How to use app:</h4>
+<li>Click on search icon from bottom navigation view.</li>
+<li>Search with exact username of account.</li>
+<li>When account is displayed, either tap on it to view account or long tap and + to save this account(so that you don't have to type again).</li>
+<li>You can tap on profile pic in grid view page to view it in full screen.</li>
+<li>Everything else is basic controls. Any other tab from bottom navigation bar are only show piece, so don't mess around</l1>
+
+<h4>Known issues/features requirement (If someone wants to contribute.)</h4>
+<l1>Cannot view all images in sidecar (group of photos posted together).</li>
+<li>Get to photo showed in swipepic in grid adapter when pressed back button. </li>
+<li>Show loading at bottom when more pics are loading.</li>
+<li>Cannot show live video and story.</li>
+<li>Option to show matched account instead of typing exact account name.</li>
+
+<h2>APK Download Link in Releases</h2>
 
 <h3>Original Developers ReadMe ahead:</h3>
 <img class='header-img' src='https://s3.amazonaws.com/codingwithmitch-static-and-media/media/instagram-clone/images/Instagram.png' />

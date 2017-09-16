@@ -12,23 +12,26 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/relLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/relLayout2"
-            android:layout_below="@+id/relLayout1">
+            android:layout_above="@+id/include"
+            android:layout_below="@+id/relLayout1"
+            android:layout_marginBottom="47dp">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_users"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:visibility="gone"
                 />
-            <include layout="@layout/layout_center_viewpager"
-                     android:visibility="gone"/>
+
+            <include
+                layout="@layout/layout_center_viewpager"
+                android:visibility="gone"/>
 
 
         </RelativeLayout>
-        <!-- top toolbar -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,9 +41,6 @@
 
         </RelativeLayout>
 
-        <!-- Middle section (body) -->
-
-
         <ProgressBar
             android:id="@+id/searchProgressBar"
             android:layout_width="70dp"
@@ -49,9 +49,8 @@
             android:visibility="gone"
             android:layout_marginTop="100dp"/>
 
-
-        <!-- bottom navigation -->
-        <include layout="@layout/layout_bottom_navigation_view"/>
+        <include layout="@layout/layout_bottom_navigation_view"
+                 android:id="@+id/include"/>
 
 
     </RelativeLayout>
