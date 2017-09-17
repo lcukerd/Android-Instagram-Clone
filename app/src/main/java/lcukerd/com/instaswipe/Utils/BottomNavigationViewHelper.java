@@ -14,15 +14,18 @@ import lcukerd.com.instaswipe.Home.HomeActivity;
 import lcukerd.com.instaswipe.ProfileActivity;
 import lcukerd.com.instaswipe.R;
 import lcukerd.com.instaswipe.SearchActivity;
+
 /**
  * Created by User on 5/28/2017.
  */
 
-public class BottomNavigationViewHelper {
+public class BottomNavigationViewHelper
+{
 
     private static final String TAG = "BottomNavigationViewHel";
 
-    public static void setupBottomNavigationView(BottomNavigationViewEx bottomNavigationViewEx){
+    public static void setupBottomNavigationView(BottomNavigationViewEx bottomNavigationViewEx)
+    {
         Log.d(TAG, "setupBottomNavigationView: Setting up BottomNavigationView");
         bottomNavigationViewEx.enableAnimation(false);
         bottomNavigationViewEx.enableItemShiftingMode(false);
@@ -30,11 +33,15 @@ public class BottomNavigationViewHelper {
         bottomNavigationViewEx.setTextVisibility(false);
     }
 
-    public static void enableNavigation(final Context context, final Activity callingActivity, BottomNavigationViewEx view){
-        view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+    public static void enableNavigation(final Context context, final Activity callingActivity, BottomNavigationViewEx view)
+    {
+        view.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
+        {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+            public boolean onNavigationItemSelected(@NonNull MenuItem item)
+            {
+                switch (item.getItemId())
+                {
 
                     case R.id.ic_house:
                         Intent intent1 = new Intent(context, HomeActivity.class);//ACTIVITY_NUM = 0
@@ -43,7 +50,7 @@ public class BottomNavigationViewHelper {
                         break;
 
                     case R.id.ic_search:
-                        Intent intent2  = new Intent(context, SearchActivity.class);//ACTIVITY_NUM = 1
+                        Intent intent2 = new Intent(context, SearchActivity.class);//ACTIVITY_NUM = 1
                         context.startActivity(intent2);
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;

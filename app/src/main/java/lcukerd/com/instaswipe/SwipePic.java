@@ -110,14 +110,14 @@ public class SwipePic extends AppCompatActivity
             final int pos = getArguments().getInt(ARG_SECTION_NUMBER) - 1;
             final String url = urls.get(pos);
 
-            if (url.charAt(0)=='v')
+            if (url.charAt(0) == 'v')
             {
                 progressBar.setVisibility(View.VISIBLE);
                 player.setVisibility(View.VISIBLE);
                 player.setCallback(this);
 
-                String code = url.substring(1,url.indexOf('@'));
-                String videoPageUrl = Scrapper.getVideoPageUrl(code,urlid);
+                String code = url.substring(1, url.indexOf('@'));
+                String videoPageUrl = Scrapper.getVideoPageUrl(code, urlid);
 
                 Ion.with(getContext()).load(videoPageUrl).asString().setCallback(new FutureCallback<String>()
                 {
@@ -129,26 +129,24 @@ public class SwipePic extends AppCompatActivity
                             String videoUrl = Scrapper.getVideoUrl(result);
 
                             urls.remove(url);
-                            urls.add(pos, "@" + videoUrl);
+                            urls.add(pos, "@" + videoUrl);  //adds '@' before videourl so that there
+                            //is no need to get that again from thumbnail
 
                             player.setSource(Uri.parse(videoUrl));
-                        }
-                        catch (NullPointerException el)
+                        } catch (NullPointerException el)
                         {
                             Toast.makeText(getContext(), "Intenet not working!", Toast.LENGTH_SHORT).show();
-                            Log.d(tag,"Internet not working");
+                            Log.d(tag, "Internet not working");
                         }
                     }
                 });
 
-            }
-            else if (url.charAt(0)=='@')
+            } else if (url.charAt(0) == '@')
             {
                 player.setVisibility(View.VISIBLE);
                 player.setCallback(this);
                 player.setSource(Uri.parse(url.substring(1)));
-            }
-            else
+            } else
             {
                 pic.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
@@ -248,7 +246,7 @@ public class SwipePic extends AppCompatActivity
         @Override
         public void onPause()
         {
-            Log.d(tag,"paused");
+            Log.d(tag, "paused");
             super.onPause();
             // Make sure the player stops playing if the user presses the home button.
             player.pause();
@@ -307,7 +305,7 @@ public class SwipePic extends AppCompatActivity
         @Override
         public void onPaused(EasyVideoPlayer player)
         {
-                // TODO handle if needed
+            // TODO handle if needed
         }
 
     }

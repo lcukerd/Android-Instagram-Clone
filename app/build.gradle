@@ -36,12 +36,6 @@ dependencies {
     //Universal image loader
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     //firebase authentication
-    compile 'com.google.firebase:firebase-auth:10.2.6'
-    //firebase database
-    compile 'com.google.firebase:firebase-database:10.2.6'
-    //firebase storage
-    compile 'com.google.firebase:firebase-storage:10.2.6'
-
     compile 'com.koushikdutta.ion:ion:2.2.1'
 
     compile 'com.github.bumptech.glide:glide:4.1.1'

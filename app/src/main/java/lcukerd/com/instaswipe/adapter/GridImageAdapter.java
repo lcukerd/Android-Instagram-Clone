@@ -41,7 +41,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
     private String mAppend;
     private ArrayList<String> imgURLs;
     private String idurl;
-    private boolean wait = false ,nomoreposts = false;
+    private boolean wait = false ,nomoreposts = false, Private = false, internetworking = true;
 
 
     public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs, String id)
@@ -70,7 +70,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
         if (imgURLs.size() - 4 <= position + 1)
         {
             Log.d(tag, "end reached");
-            if ((wait == false)&&(nomoreposts == false))
+            if ((wait == false)&&(nomoreposts == false)&&(Private==false)&&(internetworking == true))
                 loadmore();
         }
         if (convertView == null)
@@ -175,6 +175,11 @@ public class GridImageAdapter extends ArrayAdapter<String>
                     try
                     {
                         String url = Scrapper.getimageUrl(result, pos);
+                        if (url.equals("private"))
+                        {
+                            Private = true;
+                            break;
+                        }
                         url.replace("s640x640", "s360x360");
                         imgURLs.add(url);
                         Log.d(tag, url);
@@ -187,6 +192,7 @@ public class GridImageAdapter extends ArrayAdapter<String>
                         pos = result.indexOf("\",", result.indexOf("thumbnail_src", pos));
                     } catch (NullPointerException ne)
                     {
+                        internetworking = false;
                         Toast.makeText(mContext, "Internet Not Working", Toast.LENGTH_SHORT).show();
                         Log.e(tag, "Internet not working", ne);
                     } catch (StringIndexOutOfBoundsException finished)

@@ -13,14 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lcukerd.com.instaswipe.R;
-import lcukerd.com.instaswipe.SwipePic;
 import lcukerd.com.instaswipe.Utils.BottomNavigationViewHelper;
 
 
@@ -31,10 +29,10 @@ public class HomeActivity extends AppCompatActivity
     private static final int ACTIVITY_NUM = 0;
 
     private Context mContext = HomeActivity.this;
-
+/*
     //firebase
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth.AuthStateListener mAuthListener;*/
 
 
     @Override

@@ -69,7 +69,7 @@ public class SearchActivity extends AppCompatActivity
         usersArrayList = new ArrayList<>();
         usersArrayList.addAll(interact.readfromDB());
 
-        adapter = new UserListAdapter(usersArrayList, this,progressBar);
+        adapter = new UserListAdapter(usersArrayList, this, progressBar);
         userlist.setLayoutManager(new LinearLayoutManager(this));
         userlist.setAdapter(adapter);
 
@@ -118,16 +118,15 @@ public class SearchActivity extends AppCompatActivity
                                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
                                 {
                                     progressBar.setVisibility(View.GONE);
-                                    adapter.add(new user(loadedImage, username, url,query));
+                                    adapter.add(new user(loadedImage, username, url, query));
                                 }
                             });
                             Log.d(TAG, username);
                             Log.d(TAG, url);
-                        }
-                        catch (StringIndexOutOfBoundsException ex)
+                        } catch (StringIndexOutOfBoundsException ex)
                         {
-                            Log.d(TAG,"",ex);
-                            Toast.makeText(getApplicationContext(),"User not found!!",Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "", ex);
+                            Toast.makeText(getApplicationContext(), "User not found!!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

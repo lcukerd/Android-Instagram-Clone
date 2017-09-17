@@ -28,6 +28,9 @@ public class Scrapper
         return result.substring(start + 35, end - 1);
     }
 
+    /**
+     * media link that are video start with v followedby code then '@' after that url of thumbnail starts.
+     */
     public static String getimageUrl(String result, int pos)
     {
         int start = result.indexOf("thumbnail_src", pos);
@@ -109,16 +112,16 @@ public class Scrapper
         int start = id.indexOf("m/") + 2;
         int end = id.indexOf("/", start);
         String url = "https://www.instagram.com/p/" + code + "/?taken-by=" + id.substring(start, end);
-        Log.i(tag,url);
+        Log.i(tag, url);
         return url;
     }
 
     public static String getVideoUrl(String result)
     {
-        int start = result.indexOf("\"og:video\" content")+20;
-        int end = result.indexOf("\" />",start);
-        String videoUrl = result.substring(start,end);
-        Log.i(tag,"Video Url " + videoUrl);
+        int start = result.indexOf("\"og:video\" content") + 20;
+        int end = result.indexOf("\" />", start);
+        String videoUrl = result.substring(start, end);
+        Log.i(tag, "Video Url " + videoUrl);
         return videoUrl;
     }
 }
