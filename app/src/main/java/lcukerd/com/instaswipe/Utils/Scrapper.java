@@ -1,10 +1,14 @@
 package lcukerd.com.instaswipe.Utils;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import lcukerd.com.instaswipe.models.User;
 
 /**
  * Created by Programmer on 15-09-2017.
@@ -13,6 +17,36 @@ import com.koushikdutta.ion.Ion;
 public class Scrapper
 {
     private static final String tag = Scrapper.class.getSimpleName();
+
+    public static ArrayList<User> getUsersfromsearch(String result)
+    {
+        ArrayList<User> userArrayList = new ArrayList<>();
+        try
+        {
+            JSONObject jsonObject =new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray("users");
+            for (int i=0;i<jsonArray.length();i++)
+            {
+                User u = new User();
+                jsonObject = jsonArray.getJSONObject(i);
+                jsonObject = jsonObject.getJSONObject("user");
+
+                u.name=jsonObject.getString("full_name");
+                u.query = jsonObject.getString("username");
+                u.url = jsonObject.getString("profile_pic_url");
+                if (jsonObject.getBoolean("is_private")==true)
+                    u.isprivate = " (private)";
+                else
+                    u.isprivate = "";
+                userArrayList.add(u);
+            }
+        }
+        catch (JSONException e)
+        {
+            Log.e(tag,"Error in Json " + result);
+        }
+        return userArrayList;
+    }
 
     public static String getUsername(String result)
     {

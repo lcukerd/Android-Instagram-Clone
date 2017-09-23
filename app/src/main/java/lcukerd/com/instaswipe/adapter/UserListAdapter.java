@@ -29,7 +29,7 @@ import lcukerd.com.instaswipe.Database.DbInteract;
 import lcukerd.com.instaswipe.ProfileActivity;
 import lcukerd.com.instaswipe.R;
 import lcukerd.com.instaswipe.Utils.Scrapper;
-import lcukerd.com.instaswipe.models.user;
+import lcukerd.com.instaswipe.models.User;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -41,14 +41,14 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
 {
     private static final String LOG_TAG = UserListAdapter.class.getSimpleName();
 
-    private ArrayList<user> userArrayList;
+    private ArrayList<User> userArrayList;
     private LayoutInflater inflater;
     private Context mContext;
     private DisplayMetrics metrics;
     private DbInteract interact;
     private ProgressBar progressBar;
 
-    public UserListAdapter(ArrayList<user> eventArray, Context context,ProgressBar progressBar)
+    public UserListAdapter(ArrayList<User> eventArray, Context context, ProgressBar progressBar)
     {
         inflater = LayoutInflater.from(context);
         userArrayList = eventArray;
@@ -74,7 +74,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
     @Override
     public void onBindViewHolder(final EventViewHolder holder, int position)
     {
-        final user u = userArrayList.get(position);
+        final User u = userArrayList.get(position);
 
         holder.profilepic.setImageBitmap(u.profile);
         holder.username.setText(u.name);
@@ -210,13 +210,13 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
         notifyItemRangeRemoved(0, size);
     }
 
-    public void add(user u)
+    public void add(User u)
     {
         this.userArrayList.add(u);
-        notifyItemChanged(0);
+        notifyItemChanged(userArrayList.size()-1);
     }
 
-    public void refill(ArrayList<user> users)
+    public void refill(ArrayList<User> users)
     {
         clear();
         this.userArrayList.addAll(users);

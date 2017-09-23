@@ -106,7 +106,7 @@ public class NextActivity extends AppCompatActivity {
             Add properties to the Photo Objects (caption, date, imageUrl, photo_id, tags, user_id)
 
             Step 3)
-            Count the number of photos that the user already has.
+            Count the number of photos that the User already has.
 
             Step 4)
             a) Upload the photo to Firebase Storage
@@ -161,12 +161,12 @@ public class NextActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                FirebaseUser User = firebaseAuth.getCurrentUser();
 
 
-                if (user != null) {
+                if (User != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + User.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");

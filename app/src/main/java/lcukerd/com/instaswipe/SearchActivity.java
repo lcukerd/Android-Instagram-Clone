@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -32,7 +31,7 @@ import lcukerd.com.instaswipe.Database.DbInteract;
 import lcukerd.com.instaswipe.Utils.BottomNavigationViewHelper;
 import lcukerd.com.instaswipe.Utils.Scrapper;
 import lcukerd.com.instaswipe.adapter.UserListAdapter;
-import lcukerd.com.instaswipe.models.user;
+import lcukerd.com.instaswipe.models.User;
 
 /**
  * Created by User on 5/28/2017.
@@ -43,10 +42,11 @@ public class SearchActivity extends AppCompatActivity
     private static final String TAG = "SearchActivity";
     private static final int ACTIVITY_NUM = 1;
     private RecyclerView userlist;
-    private ArrayList<user> usersArrayList;
+    private ArrayList<User> usersArrayList;
     private UserListAdapter adapter;
     private DbInteract interact;
     private ProgressBar progressBar;
+    private boolean stop = false;
 
     private Context mContext = SearchActivity.this;
 
@@ -95,34 +95,52 @@ public class SearchActivity extends AppCompatActivity
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener()
         {
             @Override
-            public boolean onQueryTextSubmit(final String query)
+            public boolean onQueryTextSubmit(String query)
             {
-                Log.d(TAG, "Search Text " + query);
-                adapter.clear();
+                query = query.replaceAll(" ","+");
+                Log.d(TAG, "Search Text " + query + " https://www.instagram.com/web/search/topsearch/?context=blended&query="
+                        + query + "&rank_token=0.624286187601405");
+                stop = true;
                 progressBar.setVisibility(View.VISIBLE);
-                Ion.with(getApplicationContext()).load("https://www.instagram.com/" + query + "/").asString().setCallback(new FutureCallback<String>()
+                Ion.with(getApplicationContext())
+                        .load("https://www.instagram.com/web/search/topsearch/?context=blended&query="
+                                + query + "&rank_token=0.624286187601405")
+                        .asString().setCallback(new FutureCallback<String>()
                 {
                     @Override
                     public void onCompleted(Exception e, String result)
                     {
                         adapter.clear();
+                        stop = false;
                         ImageLoader imageLoader = ImageLoader.getInstance();
                         imageLoader.init(ImageLoaderConfiguration.createDefault(getApplicationContext()));
                         try
                         {
-                            final String username = Scrapper.getUsername(result);
-                            final String url = Scrapper.getProfilePicUrl(result);
-                            imageLoader.loadImage(url, new SimpleImageLoadingListener()
+                            final ArrayList<User> templist = Scrapper.getUsersfromsearch(result);
+                            for (int i = 0; i < templist.size(); i++)
                             {
-                                @Override
-                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
+                                final User u = templist.get(i);
+                                imageLoader.loadImage(u.url, new SimpleImageLoadingListener()
                                 {
-                                    progressBar.setVisibility(View.GONE);
-                                    adapter.add(new user(loadedImage, username, url, query));
+                                    @Override
+                                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
+                                    {
+                                        if (stop == true)
+                                        {
+                                            adapter.clear();
+                                            return;
+                                        }
+                                        progressBar.setVisibility(View.GONE);
+                                        adapter.add(new User(loadedImage,
+                                                u.name + u.isprivate, u.url, u.query));
+                                    }
+                                });
+                                if (stop == true)
+                                {
+                                    adapter.clear();
+                                    return;
                                 }
-                            });
-                            Log.d(TAG, username);
-                            Log.d(TAG, url);
+                            }
                         } catch (StringIndexOutOfBoundsException ex)
                         {
                             Log.d(TAG, "", ex);
@@ -134,7 +152,7 @@ public class SearchActivity extends AppCompatActivity
             }
 
             @Override
-            public boolean onQueryTextChange(String newText)
+            public boolean onQueryTextChange(final String newText)
             {
                 if (TextUtils.isEmpty(newText))
                 {

@@ -11,7 +11,7 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-import lcukerd.com.instaswipe.models.user;
+import lcukerd.com.instaswipe.models.User;
 
 /**
  * Created by Programmer on 14-09-2017.
@@ -33,17 +33,17 @@ public class DbInteract
         dBcontract = new eventDBcontract(context);
     }
 
-    public ArrayList<user> readfromDB()
+    public ArrayList<User> readfromDB()
     {
         SQLiteDatabase db = dBcontract.getReadableDatabase();
 
 
         Cursor cursor = db.query(eventDBcontract.ListofItem.tableName, projection, null, null, null, null, null);
 
-        ArrayList<user> usernames = new ArrayList<>();
+        ArrayList<User> usernames = new ArrayList<>();
 
         while (cursor.moveToNext())
-            usernames.add(new user(getImage(cursor.getBlob(cursor.getColumnIndex(eventDBcontract.ListofItem.columnimage))),
+            usernames.add(new User(getImage(cursor.getBlob(cursor.getColumnIndex(eventDBcontract.ListofItem.columnimage))),
                     cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnuser)),
                     cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnurl)),
                     cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnquery))));

@@ -248,7 +248,7 @@ public class SwipePic extends AppCompatActivity
         {
             Log.d(tag, "paused");
             super.onPause();
-            // Make sure the player stops playing if the user presses the home button.
+            // Make sure the player stops playing if the User presses the home button.
             player.pause();
         }
 

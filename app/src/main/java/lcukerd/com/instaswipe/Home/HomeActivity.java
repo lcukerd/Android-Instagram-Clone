@@ -117,14 +117,14 @@ public class HomeActivity extends AppCompatActivity
 
 
 *
-     * checks to see if the @param 'user' is logged in
-     * @param user
+     * checks to see if the @param 'User' is logged in
+     * @param User
 
 
-private void checkCurrentUser(FirebaseUser user){
-         Log.d(TAG, "checkCurrentUser: checking if user is logged in.");
+private void checkCurrentUser(FirebaseUser User){
+         Log.d(TAG, "checkCurrentUser: checking if User is logged in.");
 
-         if(user == null){
+         if(User == null){
              Intent intent = new Intent(mContext, LoginActivity.class);
              startActivity(intent);
          }
@@ -141,14 +141,14 @@ private void checkCurrentUser(FirebaseUser user){
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                FirebaseUser User = firebaseAuth.getCurrentUser();
 
-                //check if the user is logged in
-                checkCurrentUser(user);
+                //check if the User is logged in
+                checkCurrentUser(User);
 
-                if (user != null) {
+                if (User != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + User.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
