@@ -16,7 +16,7 @@ I am not using Instagram API, because I might never get accepted to access data 
 
 <h4>How to use app:</h4>
 <li>Click on search icon from bottom navigation view.</li>
-<li>Search with exact username of account.</li>
+<li>Search for the account.</li>
 <li>When account is displayed, either tap on it to view account or long tap and + to save this account(so that you don't have to type again).</li>
 <li>You can tap on profile pic in grid view page to view it in full screen.</li>
 <li>Everything else is basic controls. Any other tab from bottom navigation bar are only show piece, so don't mess around</l1>
@@ -26,7 +26,6 @@ I am not using Instagram API, because I might never get accepted to access data 
 <li>Get to photo showed in swipepic in grid adapter when pressed back button. </li>
 <li>Show loading at bottom when more pics are loading.</li>
 <li>Cannot show live video and story.</li>
-<li>Option to show matched account instead of typing exact account name.</li>
 
 <h2>APK Download Link in Releases</h2>
 
