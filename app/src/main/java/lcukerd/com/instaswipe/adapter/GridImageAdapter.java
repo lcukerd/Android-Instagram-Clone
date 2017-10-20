@@ -2,6 +2,7 @@ package lcukerd.com.instaswipe.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -23,16 +26,18 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
+import lcukerd.com.instaswipe.Database.DbInteract;
 import lcukerd.com.instaswipe.R;
 import lcukerd.com.instaswipe.SwipePic;
 import lcukerd.com.instaswipe.Utils.Scrapper;
 import lcukerd.com.instaswipe.Utils.SquareImageView;
+import lcukerd.com.instaswipe.models.User;
 
 /**
  * Created by User on 6/4/2017.
  */
 
-public class GridImageAdapter extends ArrayAdapter<String>
+public class GridImageAdapter extends BaseAdapter
 {
     private static final String tag = GridImageAdapter.class.getSimpleName();
     private Context mContext;
@@ -40,18 +45,23 @@ public class GridImageAdapter extends ArrayAdapter<String>
     private int layoutResource;
     private String mAppend;
     private ArrayList<String> imgURLs;
+    private ArrayList<Bitmap> downloads;
     private String idurl;
-    private boolean wait = false ,nomoreposts = false, Private = false, internetworking = true;
+    private DbInteract interact;
+    private boolean wait = false, nomoreposts = false, Private = false, internetworking = true;
 
 
     public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs, String id)
     {
-        super(context, layoutResource, imgURLs);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = context;
+        interact = new DbInteract(context);
         this.layoutResource = layoutResource;
         mAppend = append;
-        this.imgURLs = imgURLs;
+        if (id.equals("downloads") == false)
+        {
+            this.imgURLs = imgURLs;
+        }
         idurl = id;
     }
 
@@ -67,12 +77,6 @@ public class GridImageAdapter extends ArrayAdapter<String>
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent)
     {
         final ViewHolder holder;
-        if (imgURLs.size() - 4 <= position + 1)
-        {
-            Log.d(tag, "end reached");
-            if ((wait == false)&&(nomoreposts == false)&&(Private==false)&&(internetworking == true))
-                loadmore();
-        }
         if (convertView == null)
         {
             convertView = mInflater.inflate(layoutResource, parent, false);
@@ -87,77 +91,134 @@ public class GridImageAdapter extends ArrayAdapter<String>
             holder = (ViewHolder) convertView.getTag();
         }
 
-        String imgURL = getItem(position);
-
-        if (imgURL.charAt(0) == 'v')
+        if (idurl.equals("downloads"))
         {
-            holder.showifvideo.setVisibility(View.VISIBLE);
-            Glide.with(mContext)
-                    .load(imgURL.substring(imgURL.indexOf('@')+1))
-                    .listener(new RequestListener<Drawable>()
-                    {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                    Target<Drawable> target, boolean isFirstResource)
-                        {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model,
-                                                       Target<Drawable> target, DataSource dataSource,
-                                                       boolean isFirstResource)
-                        {
-                            if (holder.mProgressBar != null)
-                            {
-                                holder.mProgressBar.setVisibility(View.GONE);
-                            }
-                            return false;
-                        }
-                    })
-                    .into(holder.image);
-        }
-        else
-        {
-            holder.showifvideo.setVisibility(View.GONE);
-            Glide.with(mContext)
-                    .load(imgURL)
-                    .listener(new RequestListener<Drawable>()
-                    {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                    Target<Drawable> target, boolean isFirstResource)
-                        {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model,
-                                                       Target<Drawable> target, DataSource dataSource,
-                                                       boolean isFirstResource)
-                        {
-                            if (holder.mProgressBar != null)
-                            {
-                                holder.mProgressBar.setVisibility(View.GONE);
-                            }
-                            return false;
-                        }
-                    })
-                    .into(holder.image);
-        }
-        convertView.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
+//            Bitmap pic = Bitmap.createScaledBitmap(downloads.get(position),640,640,false);
+            holder.image.setImageBitmap(interact.getDownloadedpics(position));
+            if (holder.mProgressBar != null)
             {
-                Intent intent = new Intent(mContext, SwipePic.class);
-                intent.putStringArrayListExtra("urls", imgURLs);
-                intent.putExtra("id", idurl);
-                intent.putExtra("position", position);
-                mContext.startActivity(intent);
+                holder.mProgressBar.setVisibility(View.GONE);
             }
-        });
+            convertView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(mContext, SwipePic.class);
+                    intent.putExtra("id", idurl);
+                    intent.putExtra("position", position);
+                    mContext.startActivity(intent);
+                }
+            });
+        } else
+        {
+            if ((imgURLs.size() - 4 <= position + 1)&&(imgURLs.size()>=12))
+            {
+                Log.d(tag, "end reached");
+                if ((wait == false) && (nomoreposts == false) && (Private == false) && (internetworking == true))
+                    loadmore();
+            }
+
+            String imgURL = imgURLs.get(position);
+
+            if (imgURL.charAt(0) == 'v')
+            {
+                holder.showifvideo.setVisibility(View.VISIBLE);
+                Glide.with(mContext)
+                        .load(imgURL.substring(imgURL.indexOf('@') + 1))
+                        .listener(new RequestListener<Drawable>()
+                        {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                        Target<Drawable> target, boolean isFirstResource)
+                            {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model,
+                                                           Target<Drawable> target, DataSource dataSource,
+                                                           boolean isFirstResource)
+                            {
+                                if (holder.mProgressBar != null)
+                                {
+                                    holder.mProgressBar.setVisibility(View.GONE);
+                                }
+                                return false;
+                            }
+                        })
+                        .into(holder.image);
+            } else
+            {
+                holder.showifvideo.setVisibility(View.GONE);
+                Glide.with(mContext)
+                        .load(imgURL)
+                        .listener(new RequestListener<Drawable>()
+                        {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                        Target<Drawable> target, boolean isFirstResource)
+                            {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model,
+                                                           Target<Drawable> target, DataSource dataSource,
+                                                           boolean isFirstResource)
+                            {
+                                if (holder.mProgressBar != null)
+                                {
+                                    holder.mProgressBar.setVisibility(View.GONE);
+                                }
+                                return false;
+                            }
+                        })
+                        .into(holder.image);
+            }
+            convertView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(mContext, SwipePic.class);
+                    intent.putStringArrayListExtra("urls", imgURLs);
+                    intent.putExtra("id", idurl);
+                    intent.putExtra("position", position);
+                    mContext.startActivity(intent);
+                }
+            });
+        }
         return convertView;
+    }
+
+    @Override
+    public int getCount()
+    {
+        if (idurl.equals("downloads"))
+        {
+            return interact.numberofdownloads();
+        } else
+        {
+            return imgURLs.size();
+        }
+    }
+
+    @Override
+    public Object getItem(int position)
+    {
+        if (idurl.equals("downloads"))
+        {
+            return downloads.get(position);
+        } else
+        {
+            return imgURLs.get(position);
+        }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
     }
 
     private void loadmore()
@@ -178,6 +239,11 @@ public class GridImageAdapter extends ArrayAdapter<String>
                         if (url.equals("private"))
                         {
                             Private = true;
+                            break;
+                        }
+                        else if (url.equals("end"))
+                        {
+                            nomoreposts = true;
                             break;
                         }
                         url.replace("s640x640", "s360x360");

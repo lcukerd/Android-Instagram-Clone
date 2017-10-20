@@ -103,6 +103,11 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                                     Toast.makeText(mContext, "Account is private", Toast.LENGTH_SHORT).show();
                                     break;
                                 }
+                                else if (url.equals("end"))
+                                {
+                                    Toast.makeText(mContext, "No more Posts", Toast.LENGTH_SHORT).show();
+                                    break;
+                                }
                                 else
                                 {
 
@@ -123,6 +128,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                             intent.putStringArrayListExtra("urls", urls);
                             intent.putExtra("id", id);
                             intent.putExtra("username",u.name);
+                            intent.putExtra("action","online");
                             intent.putExtra("profile pic",interact.getBitmapAsByteArray(u.profile));
                             intent.putExtra("profile pic url",u.url);
                             intent.putExtra("source", result);

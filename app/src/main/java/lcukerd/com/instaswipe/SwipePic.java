@@ -1,9 +1,13 @@
 package lcukerd.com.instaswipe;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -12,12 +16,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -35,6 +42,7 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
+import lcukerd.com.instaswipe.Database.DbInteract;
 import lcukerd.com.instaswipe.Utils.Scrapper;
 
 public class SwipePic extends AppCompatActivity
@@ -42,6 +50,7 @@ public class SwipePic extends AppCompatActivity
     private static SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private static ArrayList<String> urls = new ArrayList<>();
+    private static Bitmap downloads;
     private static String urlid;
     private static final String tag = SwipePic.class.getSimpleName();
 
@@ -61,8 +70,16 @@ public class SwipePic extends AppCompatActivity
 
         Intent intent = getIntent();
         urlid = intent.getStringExtra("id");
-        urls = intent.getStringArrayListExtra("urls");
-        PlaceholderFragment.formaturls(0, urls.size());
+        if (urlid.equals("downloads"))
+        {
+            DbInteract interact = new DbInteract(this);
+            downloads = interact.getDownloadedpics(intent.getIntExtra("position", 0));
+        }
+        else
+        {
+            urls = intent.getStringArrayListExtra("urls");
+            PlaceholderFragment.formaturls(0, urls.size());
+        }
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -103,85 +120,120 @@ public class SwipePic extends AppCompatActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View rootView = inflater.inflate(R.layout.fragment_swipepic, container, false);
-            PhotoView pic = (PhotoView) rootView.findViewById(R.id.imageView);
+            final PhotoView pic = (PhotoView) rootView.findViewById(R.id.imageView);
             player = (EasyVideoPlayer) rootView.findViewById(R.id.player);
             progressBar = (ProgressBar) rootView.findViewById(R.id.swipepicProgressBar);
-
             final int pos = getArguments().getInt(ARG_SECTION_NUMBER) - 1;
-            final String url = urls.get(pos);
 
-            if (url.charAt(0) == 'v')
+            if (urlid.equals("downloads"))
             {
-                progressBar.setVisibility(View.VISIBLE);
-                player.setVisibility(View.VISIBLE);
-                player.setCallback(this);
-
-                String code = url.substring(1, url.indexOf('@'));
-                String videoPageUrl = Scrapper.getVideoPageUrl(code, urlid);
-
-                Ion.with(getContext()).load(videoPageUrl).asString().setCallback(new FutureCallback<String>()
-                {
-                    @Override
-                    public void onCompleted(Exception e, String result)
-                    {
-                        try
-                        {
-                            String videoUrl = Scrapper.getVideoUrl(result);
-
-                            urls.remove(url);
-                            urls.add(pos, "@" + videoUrl);  //adds '@' before videourl so that there
-                            //is no need to get that again from thumbnail
-
-                            player.setSource(Uri.parse(videoUrl));
-                        } catch (NullPointerException el)
-                        {
-                            Toast.makeText(getContext(), "Intenet not working!", Toast.LENGTH_SHORT).show();
-                            Log.d(tag, "Internet not working");
-                        }
-                    }
-                });
-
-            } else if (url.charAt(0) == '@')
-            {
-                player.setVisibility(View.VISIBLE);
-                player.setCallback(this);
-                player.setSource(Uri.parse(url.substring(1)));
-            } else
-            {
+                Log.d(tag,"downloads" + String.valueOf(pos));
                 pic.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-                Glide.with(getActivity())
-                        .load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER) - 1))
-                        .listener(new RequestListener<Drawable>()
-                        {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                        Target<Drawable> target, boolean isFirstResource)
-                            {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model,
-                                                           Target<Drawable> target, DataSource dataSource,
-                                                           boolean isFirstResource)
-                            {
-                                if (progressBar != null)
-                                {
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                                return false;
-                            }
-                        })
-                        .into(pic);
-
+                pic.setImageBitmap(downloads);
             }
-            if (urlid.equals("-1") == false)
+            else
             {
-                if (wait == false)
+                final String url = urls.get(pos);
+
+                if (url.charAt(0) == 'v')
                 {
-                    if (getArguments().getInt(ARG_SECTION_NUMBER) == urls.size() - 2)
-                        addurls();
+                    progressBar.setVisibility(View.VISIBLE);
+                    player.setVisibility(View.VISIBLE);
+                    player.setCallback(this);
+
+                    String code = url.substring(1, url.indexOf('@'));
+                    String videoPageUrl = Scrapper.getVideoPageUrl(code, urlid);
+
+                    Ion.with(getContext()).load(videoPageUrl).asString().setCallback(new FutureCallback<String>()
+                    {
+                        @Override
+                        public void onCompleted(Exception e, String result)
+                        {
+                            try
+                            {
+                                String videoUrl = Scrapper.getVideoUrl(result);
+
+                                urls.remove(url);
+                                urls.add(pos, "@" + videoUrl);  //adds '@' before videourl so that there
+                                //is no need to get that again from thumbnail
+
+                                player.setSource(Uri.parse(videoUrl));
+                            } catch (NullPointerException el)
+                            {
+                                Toast.makeText(getContext(), "Intenet not working!", Toast.LENGTH_SHORT).show();
+                                Log.d(tag, "Internet not working");
+                            }
+                        }
+                    });
+
+                } else if (url.charAt(0) == '@')
+                {
+                    player.setVisibility(View.VISIBLE);
+                    player.setCallback(this);
+                    player.setSource(Uri.parse(url.substring(1)));
+                } else
+                {
+                    pic.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    pic.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                            View layout = inflater.inflate(R.layout.popup, null);
+                            final PopupWindow pw = new PopupWindow(layout, 400, 200, true);
+                            int coord[] = new int[2];
+                            v.getLocationOnScreen(coord);
+                            pw.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getContext().getApplicationContext(), android.R.color.transparent)));
+                            pw.setOutsideTouchable(true);
+                            pw.showAtLocation(v, Gravity.NO_GRAVITY, coord[0]+200, coord[1]+500);
+                            Button save = (Button) layout.findViewById(R.id.save);
+                            save.setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    pw.dismiss();
+                                    DbInteract interact = new DbInteract(getContext());
+                                    interact.savepic(((BitmapDrawable)pic.getDrawable()).getBitmap());
+                                }
+                            });
+                        }
+                    });
+                    Glide.with(getActivity())
+                            .load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER) - 1))
+                            .listener(new RequestListener<Drawable>()
+                            {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                            Target<Drawable> target, boolean isFirstResource)
+                                {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model,
+                                                               Target<Drawable> target, DataSource dataSource,
+                                                               boolean isFirstResource)
+                                {
+                                    if (progressBar != null)
+                                    {
+                                        progressBar.setVisibility(View.GONE);
+                                    }
+                                    return false;
+                                }
+                            })
+                            .into(pic);
+
+                }
+                if (urlid.equals("-1") == false)
+                {
+                    if (wait == false)
+                    {
+                        if (getArguments().getInt(ARG_SECTION_NUMBER) == urls.size() - 2)
+                            addurls();
+                    }
                 }
             }
             return rootView;
@@ -327,7 +379,11 @@ public class SwipePic extends AppCompatActivity
         @Override
         public int getCount()
         {
-            return urls.size();
+            if (urlid.equals("downloads"))
+                return 1;
+            else
+                return urls.size();
+
         }
 
         @Override

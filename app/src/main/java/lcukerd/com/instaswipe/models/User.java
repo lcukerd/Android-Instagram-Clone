@@ -2,6 +2,7 @@ package lcukerd.com.instaswipe.models;
 
 import android.graphics.Bitmap;
 
+
 /**
  * Created by Programmer on 14-09-2017.
  */
@@ -13,6 +14,7 @@ public class User
     public String url;
     public String query;
     public String isprivate;
+    public boolean verfied = false;
 
     public User()
     {}

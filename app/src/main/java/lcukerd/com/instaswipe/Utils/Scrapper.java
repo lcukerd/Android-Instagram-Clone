@@ -23,27 +23,27 @@ public class Scrapper
         ArrayList<User> userArrayList = new ArrayList<>();
         try
         {
-            JSONObject jsonObject =new JSONObject(result);
+            JSONObject jsonObject = new JSONObject(result);
             JSONArray jsonArray = jsonObject.getJSONArray("users");
-            for (int i=0;i<jsonArray.length();i++)
+            for (int i = 0; i < jsonArray.length(); i++)
             {
                 User u = new User();
                 jsonObject = jsonArray.getJSONObject(i);
                 jsonObject = jsonObject.getJSONObject("user");
 
-                u.name=jsonObject.getString("full_name");
+                u.name = jsonObject.getString("full_name");
                 u.query = jsonObject.getString("username");
                 u.url = jsonObject.getString("profile_pic_url");
-                if (jsonObject.getBoolean("is_private")==true)
+                u.verfied = jsonObject.getBoolean("is_verified");
+                if (jsonObject.getBoolean("is_private") == true)
                     u.isprivate = " (private)";
                 else
                     u.isprivate = "";
                 userArrayList.add(u);
             }
-        }
-        catch (JSONException e)
+        } catch (JSONException e)
         {
-            Log.e(tag,"Error in Json " + result);
+            Log.e(tag, "Error in Json " + result);
         }
         return userArrayList;
     }
@@ -68,8 +68,10 @@ public class Scrapper
     public static String getimageUrl(String result, int pos)
     {
         int start = result.indexOf("thumbnail_src", pos);
-        if (start == -1)
+        if ((start == -1) && (pos == 0))
             return "private";
+        else if (start == -1)
+            return "end";
         int end = result.indexOf("\",", result.indexOf("thumbnail_src", pos));
         pos = end;
         int checkvideo = result.indexOf("\"is_video\"", pos);

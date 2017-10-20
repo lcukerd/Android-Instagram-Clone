@@ -86,7 +86,7 @@ public class SearchActivity extends AppCompatActivity
         searchView.setBackground(getResources().getDrawable(R.drawable.et_border));
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setTextColor(Color.BLACK);
-        searchAutoComplete.setHint("Write full username");
+        searchAutoComplete.setHint("Search user");
         searchAutoComplete.setHintTextColor(Color.GRAY);
         MenuItemCompat.setShowAsAction(searchIcon, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
         MenuItemCompat.setActionView(searchIcon, searchView);
@@ -131,8 +131,12 @@ public class SearchActivity extends AppCompatActivity
                                             return;
                                         }
                                         progressBar.setVisibility(View.GONE);
-                                        adapter.add(new User(loadedImage,
-                                                u.name + u.isprivate, u.url, u.query));
+                                        if (u.verfied)
+                                            adapter.add(new User(loadedImage,
+                                                u.name + u.isprivate + "✔", u.url, u.query));
+                                        else
+                                            adapter.add(new User(loadedImage,
+                                                    u.name + u.isprivate, u.url, u.query));
                                     }
                                 });
                                 if (stop == true)

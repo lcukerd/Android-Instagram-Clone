@@ -11,7 +11,7 @@
         android:allowBackup="true"
         android:icon="@drawable/instaicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/instaicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="lcukerd.com.instaswipe.Home.HomeActivity">

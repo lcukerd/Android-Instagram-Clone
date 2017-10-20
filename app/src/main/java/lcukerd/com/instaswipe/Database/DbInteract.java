@@ -20,11 +20,15 @@ import lcukerd.com.instaswipe.models.User;
 public class DbInteract
 {
     private eventDBcontract dBcontract;
-    private String[] projection = {
+    private String[] projection1 = {
             eventDBcontract.ListofItem.columnuser,
             eventDBcontract.ListofItem.columnurl,
             eventDBcontract.ListofItem.columnquery,
             eventDBcontract.ListofItem.columnimage
+    };
+    private String[] projection2 = {
+            eventDBcontract.ListofItem.columnowner,
+            eventDBcontract.ListofItem.columnpic
     };
     private static String TAG = DbInteract.class.getSimpleName();
 
@@ -36,12 +40,8 @@ public class DbInteract
     public ArrayList<User> readfromDB()
     {
         SQLiteDatabase db = dBcontract.getReadableDatabase();
-
-
-        Cursor cursor = db.query(eventDBcontract.ListofItem.tableName, projection, null, null, null, null, null);
-
+        Cursor cursor = db.query(eventDBcontract.ListofItem.tableName1, projection1, null, null, null, null, null);
         ArrayList<User> usernames = new ArrayList<>();
-
         while (cursor.moveToNext())
             usernames.add(new User(getImage(cursor.getBlob(cursor.getColumnIndex(eventDBcontract.ListofItem.columnimage))),
                     cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnuser)),
@@ -52,8 +52,7 @@ public class DbInteract
         return (usernames);
     }
 
-
-    public void adduser(Bitmap profilePic,String username,String url,String query)
+    public void adduser(Bitmap profilePic, String username, String url, String query)
     {
         SQLiteDatabase db = dBcontract.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -62,26 +61,53 @@ public class DbInteract
         values.put(eventDBcontract.ListofItem.columnuser, username);
         values.put(eventDBcontract.ListofItem.columnurl, url);
         values.put(eventDBcontract.ListofItem.columnquery, query);
-        db.insert(eventDBcontract.ListofItem.tableName, null, values);
+        db.insert(eventDBcontract.ListofItem.tableName1, null, values);
         Log.d(TAG, "Add User " + username);
     }
 
     public void deleteuser(String username)
     {
         SQLiteDatabase db = dBcontract.getWritableDatabase();
-        Log.d(TAG, String.valueOf(db.delete(eventDBcontract.ListofItem.tableName,
+        Log.d(TAG, String.valueOf(db.delete(eventDBcontract.ListofItem.tableName1,
                 eventDBcontract.ListofItem.columnuser + " = '" + username + "'", null)));
     }
 
-    public void updateprofilepic(String username,Bitmap profilepic)
+    public void updateprofilepic(String username, Bitmap profilepic)
     {
         SQLiteDatabase db = dBcontract.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(eventDBcontract.ListofItem.columnimage,getBitmapAsByteArray(profilepic));
-        db.update(eventDBcontract.ListofItem.tableName,values,eventDBcontract.ListofItem.columnuser + " = ?",new String[]{username});
+        values.put(eventDBcontract.ListofItem.columnimage, getBitmapAsByteArray(profilepic));
+        db.update(eventDBcontract.ListofItem.tableName1, values, eventDBcontract.ListofItem.columnuser + " = ?", new String[]{username});
     }
 
+    public void savepic(Bitmap pic)
+    {
+        SQLiteDatabase db = dBcontract.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(eventDBcontract.ListofItem.columnpic, getBitmapAsByteArray(pic));
+        db.insert(eventDBcontract.ListofItem.tableName2, null, values);
+        Log.i(TAG, "Pic of saved");
+    }
+
+    public Bitmap getDownloadedpics(int index)
+    {
+        SQLiteDatabase db = dBcontract.getReadableDatabase();
+        Cursor cursor = db.query(eventDBcontract.ListofItem.tableName2, projection2, null, null, null, null, null);
+        Bitmap downloads;
+        cursor.moveToPosition(index);
+        downloads=(Bitmap.createBitmap(getImage(cursor.getBlob(cursor.getColumnIndex(eventDBcontract.ListofItem.columnpic)))));
+        Log.d(TAG, "Returned " + String.valueOf(cursor.getCount()) + " pics");
+        return (downloads);
+    }
+    public int numberofdownloads()
+    {
+        SQLiteDatabase db = dBcontract.getReadableDatabase();
+        Cursor cursor = db.query(eventDBcontract.ListofItem.tableName2, projection2, null, null, null, null, null);
+        Log.d(TAG, "Returned " + String.valueOf(cursor.getCount()) + " pics");
+        return (cursor.getCount());
+    }
 
     public static byte[] getBitmapAsByteArray(Bitmap bitmap)
     {
@@ -90,7 +116,8 @@ public class DbInteract
         return outputStream.toByteArray();
     }
 
-    public static Bitmap getImage(byte[] image) {
+    public static Bitmap getImage(byte[] image)
+    {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 

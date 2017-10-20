@@ -10,8 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,6 +45,7 @@ public class ProfileActivity extends AppCompatActivity
     private ProgressBar mProgressBar;
 
     private ArrayList<String> photos = new ArrayList<>();
+    private ArrayList<Bitmap> downloads = new ArrayList<>();
     String idurl, sourceCode, username, profilepicURL;
     Bitmap profilePic;
 
@@ -66,16 +69,27 @@ public class ProfileActivity extends AppCompatActivity
         bottomNavigationView = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         interact = new DbInteract(this);
 
-        photos = getIntent().getStringArrayListExtra("urls");
-        idurl = getIntent().getStringExtra("id");
-        sourceCode = getIntent().getStringExtra("source");
-        username = getIntent().getStringExtra("username");
-        profilePic = interact.getImage(getIntent().getByteArrayExtra("profile pic"));
-        profilepicURL = getIntent().getStringExtra("profile pic url");
+        if (getIntent().getStringExtra("action").equals("downloads"))
+        {
+            LinearLayout profile_detail = (LinearLayout) findViewById(R.id.linLayout);
+            profile_detail.setVisibility(View.GONE);
+            idurl = getIntent().getStringExtra("action");
+            mUsername.setText("Downloads");
+            mProgressBar.setVisibility(View.GONE);
+        } else
+        {
+            photos = getIntent().getStringArrayListExtra("urls");
+            idurl = getIntent().getStringExtra("id");
+            sourceCode = getIntent().getStringExtra("source");
+            username = getIntent().getStringExtra("username");
+            profilePic = interact.getImage(getIntent().getByteArrayExtra("profile pic"));
+            profilepicURL = getIntent().getStringExtra("profile pic url");
+            setProfileWidgets();
+        }
+
 
         setupBottomNavigationView();
         setupGridView();
-        setProfileWidgets();
     }
 
     private void setupGridView()
@@ -100,7 +114,7 @@ public class ProfileActivity extends AppCompatActivity
                 Scrapper.getFollowing(sourceCode), Scrapper.getPosts(sourceCode), profilePic, username);
         if (profilepicURL.equals(Scrapper.getProfilePicUrl(sourceCode)) == false)
         {
-            Log.d(tag,"Profile Pic updated");
+            Log.d(tag, "Profile Pic updated");
             ImageLoader imageLoader = ImageLoader.getInstance();
             imageLoader.init(ImageLoaderConfiguration.createDefault(this));
             imageLoader.loadImage(Scrapper.getProfilePicUrl(sourceCode),
@@ -111,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity
                         {
                             profilePic = loadedImage;
                             profilepicURL = Scrapper.getProfilePicUrl(sourceCode);
-                            interact.updateprofilepic(username,loadedImage);
+                            interact.updateprofilepic(username, loadedImage);
                             account.setProfile_photo(profilePic);
                             mProfilePhoto.setImageBitmap(loadedImage);
                         }
@@ -132,9 +146,9 @@ public class ProfileActivity extends AppCompatActivity
                 ArrayList<String> temp = new ArrayList<>();
                 temp.add(profilepicURL);
                 Intent intent = new Intent(ProfileActivity.this, SwipePic.class);
-                intent.putStringArrayListExtra("urls",temp);
-                intent.putExtra("id","-1");
-                intent.putExtra("position",0);
+                intent.putStringArrayListExtra("urls", temp);
+                intent.putExtra("id", "-1");
+                intent.putExtra("position", 0);
                 startActivity(intent);
             }
         });
