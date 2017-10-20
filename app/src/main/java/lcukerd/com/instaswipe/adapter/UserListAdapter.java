@@ -132,6 +132,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                             intent.putExtra("profile pic",interact.getBitmapAsByteArray(u.profile));
                             intent.putExtra("profile pic url",u.url);
                             intent.putExtra("source", result);
+                            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                             progressBar.setVisibility(View.GONE);
                             mContext.startActivity(intent);
                         } catch (NullPointerException ne)

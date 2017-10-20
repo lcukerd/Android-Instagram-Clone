@@ -41,6 +41,8 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import lcukerd.com.instaswipe.Database.DbInteract;
 import lcukerd.com.instaswipe.Utils.Scrapper;
@@ -50,8 +52,9 @@ public class SwipePic extends AppCompatActivity
     private static SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private static ArrayList<String> urls = new ArrayList<>();
-    private static Bitmap downloads;
+    private static Map<Integer, Bitmap> downloads = new HashMap<>();
     private static String urlid;
+    private int noofdownloads;
     private static final String tag = SwipePic.class.getSimpleName();
 
     @Override
@@ -73,7 +76,8 @@ public class SwipePic extends AppCompatActivity
         if (urlid.equals("downloads"))
         {
             DbInteract interact = new DbInteract(this);
-            downloads = interact.getDownloadedpics(intent.getIntExtra("position", 0));
+            downloads.put(intent.getIntExtra("position", 0),interact.getDownloadedpics(intent.getIntExtra("position", 0)));
+            noofdownloads = interact.numberofdownloads();
         }
         else
         {
@@ -129,7 +133,17 @@ public class SwipePic extends AppCompatActivity
             {
                 Log.d(tag,"downloads" + String.valueOf(pos));
                 pic.setVisibility(View.VISIBLE);
-                pic.setImageBitmap(downloads);
+                DbInteract interact = new DbInteract(getContext());
+                if (downloads.get(pos) != null)
+                    pic.setImageBitmap(downloads.get(pos));
+                else
+                {
+                    Bitmap image = interact.getDownloadedpics(pos);
+                    image = Bitmap.createScaledBitmap(image,(int)(640*((float)image.getWidth()/(float) image.getHeight())),640,false);
+                    pic.setImageBitmap(image);
+                    downloads.put(pos,image);
+                }
+
             }
             else
             {
@@ -168,6 +182,7 @@ public class SwipePic extends AppCompatActivity
 
                 } else if (url.charAt(0) == '@')
                 {
+                    progressBar.setVisibility(View.GONE);
                     player.setVisibility(View.VISIBLE);
                     player.setCallback(this);
                     player.setSource(Uri.parse(url.substring(1)));
@@ -380,7 +395,7 @@ public class SwipePic extends AppCompatActivity
         public int getCount()
         {
             if (urlid.equals("downloads"))
-                return 1;
+                return noofdownloads;
             else
                 return urls.size();
 

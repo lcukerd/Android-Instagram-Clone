@@ -21,7 +21,7 @@ public class eventDBcontract extends SQLiteOpenHelper
 
     private static final String SQL_CREATE_ENTRIES2 =
             "CREATE TABLE " + ListofItem.tableName2 + " (" +
-                    ListofItem.columnpic + " BLOB, " +
+                    ListofItem.columnpic + " TEXT, " +
                     ListofItem.columnowner + " TEXT );";
 
     public static int DATABASE_VERSION = 2;

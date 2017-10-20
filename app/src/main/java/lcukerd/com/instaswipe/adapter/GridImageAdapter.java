@@ -25,6 +25,8 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import lcukerd.com.instaswipe.Database.DbInteract;
 import lcukerd.com.instaswipe.R;
@@ -42,10 +44,10 @@ public class GridImageAdapter extends BaseAdapter
     private static final String tag = GridImageAdapter.class.getSimpleName();
     private Context mContext;
     private LayoutInflater mInflater;
-    private int layoutResource;
+    private int layoutResource,noofdownload;
     private String mAppend;
     private ArrayList<String> imgURLs;
-    private ArrayList<Bitmap> downloads;
+    private Map<Integer, Bitmap> downloads = new HashMap<>();
     private String idurl;
     private DbInteract interact;
     private boolean wait = false, nomoreposts = false, Private = false, internetworking = true;
@@ -62,6 +64,8 @@ public class GridImageAdapter extends BaseAdapter
         {
             this.imgURLs = imgURLs;
         }
+        else
+            noofdownload = interact.numberofdownloads();
         idurl = id;
     }
 
@@ -93,8 +97,15 @@ public class GridImageAdapter extends BaseAdapter
 
         if (idurl.equals("downloads"))
         {
-//            Bitmap pic = Bitmap.createScaledBitmap(downloads.get(position),640,640,false);
-            holder.image.setImageBitmap(interact.getDownloadedpics(position));
+            if (downloads.get(position) != null)
+                holder.image.setImageBitmap(downloads.get(position));
+            else
+            {
+                Bitmap pic = interact.getDownloadedpics(position);
+                pic = Bitmap.createScaledBitmap(pic,(int)(640*((float)pic.getWidth()/(float) pic.getHeight())),640,false);
+                holder.image.setImageBitmap(pic);
+                downloads.put(position,pic);
+            }
             if (holder.mProgressBar != null)
             {
                 holder.mProgressBar.setVisibility(View.GONE);
@@ -112,7 +123,7 @@ public class GridImageAdapter extends BaseAdapter
             });
         } else
         {
-            if ((imgURLs.size() - 4 <= position + 1)&&(imgURLs.size()>=12))
+            if ((imgURLs.size() - 4 <= position + 1) && (imgURLs.size() >= 12))
             {
                 Log.d(tag, "end reached");
                 if ((wait == false) && (nomoreposts == false) && (Private == false) && (internetworking == true))
@@ -197,7 +208,7 @@ public class GridImageAdapter extends BaseAdapter
     {
         if (idurl.equals("downloads"))
         {
-            return interact.numberofdownloads();
+            return noofdownload;
         } else
         {
             return imgURLs.size();
@@ -217,7 +228,8 @@ public class GridImageAdapter extends BaseAdapter
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(int position)
+    {
         return 0;
     }
 
@@ -240,8 +252,7 @@ public class GridImageAdapter extends BaseAdapter
                         {
                             Private = true;
                             break;
-                        }
-                        else if (url.equals("end"))
+                        } else if (url.equals("end"))
                         {
                             nomoreposts = true;
                             break;
