@@ -1,4 +1,3 @@
 Show group of pics (Sidecar)
 get to photo showed in swipepic in grid adapter when pressed back
-account search
 notify that more image will be there soon

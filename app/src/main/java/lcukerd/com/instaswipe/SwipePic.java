@@ -1,12 +1,16 @@
 package lcukerd.com.instaswipe;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -46,6 +50,7 @@ import java.util.Map;
 
 import lcukerd.com.instaswipe.Database.DbInteract;
 import lcukerd.com.instaswipe.Utils.Scrapper;
+import lcukerd.com.instaswipe.Utils.loadImage;
 
 public class SwipePic extends AppCompatActivity
 {
@@ -73,6 +78,12 @@ public class SwipePic extends AppCompatActivity
 
         Intent intent = getIntent();
         urlid = intent.getStringExtra("id");
+        SharedPreferences prefs = getSharedPreferences("lcukerd.com.instaswipe", MODE_PRIVATE);
+        if (prefs.getBoolean("intialLaunchF", true))
+        {
+            Toast.makeText(this, "Tap and hold on image to save it.", Toast.LENGTH_SHORT).show();
+            prefs.edit().putBoolean("intialLaunchF", false).commit();
+        }
         if (urlid.equals("downloads"))
         {
             DbInteract interact = new DbInteract(this);
@@ -123,7 +134,7 @@ public class SwipePic extends AppCompatActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            View rootView = inflater.inflate(R.layout.fragment_swipepic, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_swipepic, container, false);
             final PhotoView pic = (PhotoView) rootView.findViewById(R.id.imageView);
             player = (EasyVideoPlayer) rootView.findViewById(R.id.player);
             progressBar = (ProgressBar) rootView.findViewById(R.id.swipepicProgressBar);
@@ -133,17 +144,8 @@ public class SwipePic extends AppCompatActivity
             {
                 Log.d(tag,"downloads" + String.valueOf(pos));
                 pic.setVisibility(View.VISIBLE);
-                DbInteract interact = new DbInteract(getContext());
-                if (downloads.get(pos) != null)
-                    pic.setImageBitmap(downloads.get(pos));
-                else
-                {
-                    Bitmap image = interact.getDownloadedpics(pos);
-                    image = Bitmap.createScaledBitmap(image,(int)(640*((float)image.getWidth()/(float) image.getHeight())),640,false);
-                    pic.setImageBitmap(image);
-                    downloads.put(pos,image);
-                }
-
+                loadImagefull loader = new loadImagefull(getContext(),downloads,pic);
+                loader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,pos);
             }
             else
             {
@@ -190,30 +192,15 @@ public class SwipePic extends AppCompatActivity
                 {
                     pic.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
-                    pic.setOnClickListener(new View.OnClickListener()
+                    pic.setOnLongClickListener(new View.OnLongClickListener()
                     {
                         @Override
-                        public void onClick(View v)
+                        public boolean onLongClick(View v)
                         {
-                            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                            View layout = inflater.inflate(R.layout.popup, null);
-                            final PopupWindow pw = new PopupWindow(layout, 400, 200, true);
-                            int coord[] = new int[2];
-                            v.getLocationOnScreen(coord);
-                            pw.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getContext().getApplicationContext(), android.R.color.transparent)));
-                            pw.setOutsideTouchable(true);
-                            pw.showAtLocation(v, Gravity.NO_GRAVITY, coord[0]+200, coord[1]+500);
-                            Button save = (Button) layout.findViewById(R.id.save);
-                            save.setOnClickListener(new View.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    pw.dismiss();
-                                    DbInteract interact = new DbInteract(getContext());
-                                    interact.savepic(((BitmapDrawable)pic.getDrawable()).getBitmap());
-                                }
-                            });
+                            Snackbar.make(rootView, "Image has been saved!", Snackbar.LENGTH_SHORT).show();
+                            DbInteract interact = new DbInteract(getContext());
+                            interact.savepic(((BitmapDrawable)pic.getDrawable()).getBitmap());
+                            return true;
                         }
                     });
                     Glide.with(getActivity())
@@ -405,6 +392,14 @@ public class SwipePic extends AppCompatActivity
         public CharSequence getPageTitle(int position)
         {
             return null;
+        }
+    }
+
+    static class loadImagefull extends loadImage
+    {
+        loadImagefull(Context context,Map<Integer,Bitmap> down,PhotoView pic)
+        {
+            super(context,down,pic,1);
         }
     }
 }

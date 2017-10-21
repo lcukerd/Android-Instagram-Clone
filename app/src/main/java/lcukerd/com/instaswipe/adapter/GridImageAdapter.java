@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -33,6 +36,7 @@ import lcukerd.com.instaswipe.R;
 import lcukerd.com.instaswipe.SwipePic;
 import lcukerd.com.instaswipe.Utils.Scrapper;
 import lcukerd.com.instaswipe.Utils.SquareImageView;
+import lcukerd.com.instaswipe.Utils.loadImage;
 import lcukerd.com.instaswipe.models.User;
 
 /**
@@ -44,7 +48,7 @@ public class GridImageAdapter extends BaseAdapter
     private static final String tag = GridImageAdapter.class.getSimpleName();
     private Context mContext;
     private LayoutInflater mInflater;
-    private int layoutResource,noofdownload;
+    private int layoutResource, noofdownload;
     private String mAppend;
     private ArrayList<String> imgURLs;
     private Map<Integer, Bitmap> downloads = new HashMap<>();
@@ -63,8 +67,7 @@ public class GridImageAdapter extends BaseAdapter
         if (id.equals("downloads") == false)
         {
             this.imgURLs = imgURLs;
-        }
-        else
+        } else
             noofdownload = interact.numberofdownloads();
         idurl = id;
     }
@@ -97,19 +100,9 @@ public class GridImageAdapter extends BaseAdapter
 
         if (idurl.equals("downloads"))
         {
-            if (downloads.get(position) != null)
-                holder.image.setImageBitmap(downloads.get(position));
-            else
-            {
-                Bitmap pic = interact.getDownloadedpics(position);
-                pic = Bitmap.createScaledBitmap(pic,(int)(640*((float)pic.getWidth()/(float) pic.getHeight())),640,false);
-                holder.image.setImageBitmap(pic);
-                downloads.put(position,pic);
-            }
-            if (holder.mProgressBar != null)
-            {
-                holder.mProgressBar.setVisibility(View.GONE);
-            }
+            loadImageGrid loader = new loadImageGrid(mContext, downloads, holder.image);
+            loader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, position);
+            holder.mProgressBar.setVisibility(View.GONE);
             convertView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -119,6 +112,19 @@ public class GridImageAdapter extends BaseAdapter
                     intent.putExtra("id", idurl);
                     intent.putExtra("position", position);
                     mContext.startActivity(intent);
+                }
+            });
+            convertView.setOnLongClickListener(new View.OnLongClickListener()
+            {
+                @Override
+                public boolean onLongClick(View v)
+                {
+                    interact.deletedownloadedpic(position);
+                    Snackbar.make(v, "Pic deleted!", Snackbar.LENGTH_SHORT).show();
+                    downloads = new HashMap<>();
+                    noofdownload--;
+                    notifyDataSetChanged();
+                    return true;
                 }
             });
         } else
@@ -283,6 +289,15 @@ public class GridImageAdapter extends BaseAdapter
                 wait = false;
             }
         });
+    }
+
+    class loadImageGrid extends loadImage
+    {
+        loadImageGrid(Context context, Map<Integer, Bitmap> down, SquareImageView pic)
+        {
+            super(context, down, pic, 0);
+        }
+
     }
 
 }

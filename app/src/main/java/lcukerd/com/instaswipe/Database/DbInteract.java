@@ -142,7 +142,7 @@ public class DbInteract
         Bitmap photo = null;
         try
         {
-            Log.d(TAG,cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnpic)));
+            Log.d(TAG, cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnpic)));
             File fos = new File(cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnpic)));
             photo = BitmapFactory.decodeStream(new FileInputStream(fos));
         } catch (IOException e)
@@ -160,6 +160,19 @@ public class DbInteract
         Log.d(TAG, "Returned " + String.valueOf(cursor.getCount()) + " pics");
         return (cursor.getCount());
     }
+
+    public void deletedownloadedpic(int index)
+    {
+        SQLiteDatabase db = dBcontract.getWritableDatabase();
+        Cursor cursor = db.query(eventDBcontract.ListofItem.tableName2, projection2, null, null, null, null, null);
+        cursor.moveToPosition(index);
+        String uri = cursor.getString(cursor.getColumnIndex(eventDBcontract.ListofItem.columnpic));
+        Log.d(TAG, "Deleted " + String.valueOf(db.delete(eventDBcontract.ListofItem.tableName2,
+                eventDBcontract.ListofItem.columnpic + " = '" + uri + "'", null)) + " pic.");
+        File file = new File(uri);
+        file.delete();
+    }
+
 
     public static byte[] getBitmapAsByteArray(Bitmap bitmap)
     {

@@ -2,8 +2,10 @@ package lcukerd.com.instaswipe.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Fade;
@@ -32,6 +34,7 @@ import lcukerd.com.instaswipe.Utils.Scrapper;
 import lcukerd.com.instaswipe.models.User;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Programmer on 14-09-2017.
@@ -47,12 +50,15 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
     private DisplayMetrics metrics;
     private DbInteract interact;
     private ProgressBar progressBar;
+    private boolean mylist = true;
+    private SharedPreferences prefs;
 
     public UserListAdapter(ArrayList<User> eventArray, Context context, ProgressBar progressBar)
     {
         inflater = LayoutInflater.from(context);
         userArrayList = eventArray;
         mContext = context;
+        prefs = context.getSharedPreferences("lcukerd.com.instaswipe", MODE_PRIVATE);
         interact = new DbInteract(context);
         metrics = context.getResources().getDisplayMetrics();
         this.progressBar = progressBar;
@@ -102,13 +108,11 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                                 {
                                     Toast.makeText(mContext, "Account is private", Toast.LENGTH_SHORT).show();
                                     break;
-                                }
-                                else if (url.equals("end"))
+                                } else if (url.equals("end"))
                                 {
                                     Toast.makeText(mContext, "No more Posts", Toast.LENGTH_SHORT).show();
                                     break;
-                                }
-                                else
+                                } else
                                 {
 
                                     url.replace("s640x640", "s360x360");
@@ -127,10 +131,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                             Intent intent = new Intent(mContext, ProfileActivity.class);
                             intent.putStringArrayListExtra("urls", urls);
                             intent.putExtra("id", id);
-                            intent.putExtra("username",u.name);
-                            intent.putExtra("action","online");
-                            intent.putExtra("profile pic",interact.getBitmapAsByteArray(u.profile));
-                            intent.putExtra("profile pic url",u.url);
+                            intent.putExtra("username", u.name);
+                            intent.putExtra("action", "online");
+                            intent.putExtra("profile pic", interact.getBitmapAsByteArray(u.profile));
+                            intent.putExtra("profile pic url", u.url);
                             intent.putExtra("source", result);
                             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                             progressBar.setVisibility(View.GONE);
@@ -154,64 +158,28 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
             @Override
             public boolean onLongClick(View v)
             {
-                try
+                if (mylist)
                 {
-                    final LayoutInflater inflater = (LayoutInflater) mContext.getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                    View layout = inflater.inflate(R.layout.actionbuttons, (ViewGroup) v.findViewById(R.id.actionButtons));
-                    Log.d("Popup", String.valueOf(metrics.widthPixels));
-                    final PopupWindow pw = new PopupWindow(layout, 350 * (metrics.widthPixels / 1080), 200, true);
-                    pw.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(mContext, android.R.color.transparent)));
-                    pw.setOutsideTouchable(true);
-                    int coord[] = new int[2];
-                    v.getLocationOnScreen(coord);
-
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    {
-                        Fade explode = new Fade();
-                        pw.setEnterTransition(explode);
-                    }
-
-                    pw.showAtLocation(v, Gravity.NO_GRAVITY, 500, coord[1] - 100);
-
-                    Button add = (Button) layout.findViewById(R.id.popupadd);
-                    Button del = (Button) layout.findViewById(R.id.popupdel);
-                    add.setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            interact.adduser(u.profile,
-                                    u.name,
-                                    u.url,
-                                    u.query);
-                            pw.dismiss();
-                        }
-                    });
-                    del.setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v)
-                        {
-                            interact.deleteuser(u.name);
-                            int pos = userArrayList.indexOf(u);
-                            Log.d(LOG_TAG, String.valueOf(pos));
-                            userArrayList.remove(u);
-                            notifyItemRemoved(pos);
-                            pw.dismiss();
-                        }
-                    });
-                } catch (Exception e)
+                    interact.deleteuser(u.name);
+                    int pos = userArrayList.indexOf(u);
+                    Log.d(LOG_TAG, String.valueOf(pos));
+                    userArrayList.remove(u);
+                    notifyItemRemoved(pos);
+                    Snackbar.make(v, "Account removed", Snackbar.LENGTH_SHORT).show();
+                } else
                 {
-                    e.printStackTrace();
+                    interact.adduser(u.profile, u.name, u.url, u.query);
+                    Snackbar.make(v, "Account added", Snackbar.LENGTH_SHORT).show();
                 }
-                return true;
 
+                return true;
             }
         });
     }
 
     public void clear()
     {
+        mylist = false;
         int size = this.userArrayList.size();
         this.userArrayList.clear();
         notifyItemRangeRemoved(0, size);
@@ -219,13 +187,24 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
 
     public void add(User u)
     {
+        if (prefs.getBoolean("intialLaunchOnline", true))
+        {
+            Toast.makeText(mContext, "Tap and hold on account to add it.", Toast.LENGTH_SHORT).show();
+            prefs.edit().putBoolean("intialLaunchOnline", false).commit();
+        }
         this.userArrayList.add(u);
-        notifyItemChanged(userArrayList.size()-1);
+        notifyItemChanged(userArrayList.size() - 1);
     }
 
     public void refill(ArrayList<User> users)
     {
         clear();
+        if (prefs.getBoolean("intialLaunchOffline", true) && prefs.getBoolean("intialLaunchOnline", false))
+        {
+            Toast.makeText(mContext, "Tap and hold on account to delete it.", Toast.LENGTH_SHORT).show();
+            prefs.edit().putBoolean("intialLaunchOffline", false).commit();
+        }
+        mylist = true;
         this.userArrayList.addAll(users);
         notifyItemRangeInserted(0, userArrayList.size());
     }

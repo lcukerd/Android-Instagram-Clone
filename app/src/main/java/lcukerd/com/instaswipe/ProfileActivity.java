@@ -1,6 +1,7 @@
 package lcukerd.com.instaswipe;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -71,6 +72,12 @@ public class ProfileActivity extends AppCompatActivity
 
         if (getIntent().getStringExtra("action").equals("downloads"))
         {
+            SharedPreferences prefs = getSharedPreferences("lcukerd.com.instaswipe", MODE_PRIVATE);
+            if (prefs.getBoolean("intialLaunchG", true))
+            {
+                Toast.makeText(this, "Tap and hold on image to delete it.", Toast.LENGTH_SHORT).show();
+                prefs.edit().putBoolean("intialLaunchG", false).commit();
+            }
             LinearLayout profile_detail = (LinearLayout) findViewById(R.id.linLayout);
             profile_detail.setVisibility(View.GONE);
             idurl = getIntent().getStringExtra("action");
