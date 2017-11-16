@@ -30,19 +30,14 @@ I am not using Instagram API, because I might never get accepted to access data 
 <li>Show loading at bottom when more pics are loading.</li>
 <li>Cannot show live video and story.</li>
 <br>
-<img src="https://image.ibb.co/mi1GF6/Screenshot_20171115_105557.png" alt="Screenshot1" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://image.ibb.co/byDJTR/Screenshot_20171115_105612.png" alt="Screenshot2" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://image.ibb.co/hwn1hm/Screenshot_20171115_105851.png" alt="Screenshot3" width="200" height="340">
-Profile Pic in original upload quality in full screen:
-<img src="https://image.ibb.co/gZBiv6/Screenshot_20171115_105855.png" alt="Screenshot4" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://image.ibb.co/eHqyTR/Screenshot_20171115_105910.png" alt="Screenshot5" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
-Ability to swipe to next pic and view image in their orinal aspect ratio.
-<img src="https://image.ibb.co/enWiv6/Screenshot_20171115_105913.png" alt="Screenshot6" width="200" height="340">
-Ability to zoom and pan image in full screen.
-<img src="https://image.ibb.co/gFtJTR/Screenshot_20171115_105922.png" alt="Screenshot7" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
-Ability to save pic on phone.
-<img src="https://image.ibb.co/cKrGF6/Screenshot_20171115_110019.png" alt="Screenshot8" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
-Grid view to view offline and downloaded pics.
+<img src="https://image.ibb.co/mi1GF6/Screenshot_20171115_105557.png" alt="Screenshot1" width="200" height="340">
+<img src="https://image.ibb.co/byDJTR/Screenshot_20171115_105612.png" alt="Screenshot2" width="200" height="340">
+<img src="https://image.ibb.co/hwn1hm/Screenshot_20171115_105851.png" alt="Screenshot3" width="200" height="340">Profile Pic in original upload quality in full screen.
+<img src="https://image.ibb.co/gZBiv6/Screenshot_20171115_105855.png" alt="Screenshot4" width="200" height="340">
+<img src="https://image.ibb.co/eHqyTR/Screenshot_20171115_105910.png" alt="Screenshot5" width="200" height="340">Ability to swipe to next pic and view image in their orinal aspect ratio.
+<img src="https://image.ibb.co/enWiv6/Screenshot_20171115_105913.png" alt="Screenshot6" width="200" height="340">Ability to zoom and pan image in full screen.
+<img src="https://image.ibb.co/gFtJTR/Screenshot_20171115_105922.png" alt="Screenshot7" width="200" height="340">Ability to save pic on phone.
+<img src="https://image.ibb.co/cKrGF6/Screenshot_20171115_110019.png" alt="Screenshot8" width="200" height="340">Grid view to view offline and downloaded pics.
 <img src="https://image.ibb.co/iCL42m/Screenshot_20171115_110150.png" alt="Screenshot9" width="200" height="340">
 <br>
 
