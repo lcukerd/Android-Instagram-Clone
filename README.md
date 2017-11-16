@@ -2,7 +2,7 @@
 
 InstaSwipe is an Instagram client for Android. It will show posts (images and videos) in fullscreen mode and will let you swipe to get to next post. You can also view others profile pic in high resolution in fullscreen. All that without logging in. It might not seem much but will be heaven for some.
 
-Originally, this project is a "clone of Instagram" made ,using Firebase(auth,data etc), owned by Mitch Tabian. I have edited the source code to make it retrieve real Instagram data and show in the pre-built UI of this project. Few pieces of UI that I used here are made/rebuilt by me.
+Originally, this project is a "clone of Instagram" made ,using Firebase(auth,data etc), owned by Mitch Tabian. I have changed the source code to make it retrieve real Instagram data and show in the pre-built UI of this project.Pieces of UI that I used here are made/rebuilt by me.
 
 I am not using Instagram API, because I might never get accepted to access data out of sandbox API, therefore I am retrieving data from source code of Instagram's web pages.
 
@@ -12,225 +12,38 @@ I am not using Instagram API, because I might never get accepted to access data 
 <li>Can view profile pic in full screen as well.</li>
 <li>Browse public accounts incognito (no need to signin).</li>
 <li>Images once loaded, will reopen with little to no internet requirement (If you move to "low speed zone").</li>
+  <li>You can Download pic so that you view it offline</li>
 </ul>
 
 <h4>How to use app:</h4>
 <li>Click on search icon from bottom navigation view.</li>
 <li>Search for the account.</li>
-<li>When account is displayed, either tap on it to view account or long tap and + to save this account(so that you don't have to type again).</li>
-<li>You can tap on profile pic in grid view page to view it in full screen.</li>
-<li>Everything else is basic controls. Any other tab from bottom navigation bar are only show piece, so don't mess around</l1>
+<li>When account is displayed, either tap on it to view account or long tap to save this account(so that you don't have to search it again).</li>
+<li>You can tap on profile pic in grid view page to view its original upload quality in full screen.</li>
+<li>Everything else is basic controls. </li>
+<li>You can now download pics and save it on your phone. (Download icon in bottom navigation view).</li>
+<li>Any other tab from bottom navigation bar are for future use, so don't mess around</l1>
 
 <h4>Known issues/features requirement (If someone wants to contribute.)</h4>
 <l1>Cannot view all images in sidecar (group of photos posted together).</li>
 <li>Get to photo showed in swipepic in grid adapter when pressed back button. </li>
 <li>Show loading at bottom when more pics are loading.</li>
 <li>Cannot show live video and story.</li>
-
-<h2>APK Download Link in Releases</h2>
-
-<h3>Original Developers ReadMe ahead:</h3>
-<img class='header-img' src='https://s3.amazonaws.com/codingwithmitch-static-and-media/media/instagram-clone/images/Instagram.png' />
-
-<h1>Android Instagram Clone Course</h1>
-<h4>A step-by-step guide to build your own Instagram Clone</h4>
-<h4>Watch it here: <a href='https://codingwithmitch.com/courses/instagram-clone/' target='_blank'>Instagram Clone Course</a></h4>
-<hr>
-<p>The course outline is still not "set in stone." I'll be building it in modules so you can have check points if you want to take a break
-and come back to it in the future. At this point I'm guessing there will be 30-50 videos.</p>
-
-<p>We'll start by building almost the entire interface and then move onto the back-end.</p>
-<p>The back-end will be almost 100% Firebase as that will make it simply for the purposes of this course. </p>
-<p>If this were a real production app I would probably use:
-
-<ul>
-<li>Firebase for user management and authentication</li>
-<li>Amazon Web Services to store images and videos</li>
-<li>A server (website) SQL database for saving all other data. Take a look 
-<a href='https://github.com/Vheissu/Open-Source-Database-Schemas/blob/master/vheissu-instagram-schema.md' target='_blank'>here</a> for an outline of what 
-the database would roughly look like if you did that. (SQLite is probably fine)</li>
-</ul>
-<p/>
-
-<p>That would require a <b>TON</b> more code. Setting up the server/website alone would probably be another 20 videos or so. So to keep
-things simple and condensed I will just use Firebase for everything. After all this is an Android Course, not a web development course.</p>
-
-<h2>Lecture Source Code:</h2>
-<ol>
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/2cac213283ceafe3b1c627096065bd11f80d4161'> Getting Started</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/0f0377337204105604e23f08d3939b5be1556684'> Toolbars and NavigationView</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/69743899065c2b921f99dde9a2aabb5c8f8adc70'> Customizing the BottomNavigationView</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/b42ec4471f1a63c8d6463783b23ca558c12381c4'> BottomNavigationView Activities</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/1cbeb887a4e8cab0e319b50d3506cf2977813723'> Organizing Things and Tab-Prep</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/37a7d8091e96bc0316a7f456b4451fb279d797b5'> SectionsPagerAdapter (Home Screen Tabs)</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/82996f0a25b98340d4b249eafc904495ea3989ee'> Profile Toolbar and Menu</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/766ec53ac97cef3d4edccec18819bea2a5825be0'> Building the Profile Part 1</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/75567884e79c207bd7ddaf9695cfe6b5cfa0f85f'> Building the Profile Part 2</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/194fbc7e36d15f4ac7656b90d7a3c982ef703a01'> Account Settings Layout</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/07da29439db27d2bb1a725567ce7805d1601564a'> Account Settings Navigation</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/b5b71da913bdd831c341dc825ab5cf9844559b1b'> Account Settings Fragments</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/b29cf20ac12e0d9cda259e3bf0e360ad82544f44'> EditProfile Fragment Layout</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/06fbce53308bebfdc215a0d997499cf405443b1b'> Universal Image Loader Config</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/9391edbd31e47ff72773fa2bfe710b086a0046e4'> Testing Images in the User Profile</a></li>
-
-<li><a href='https://github.com/mitchtabian/Android-Instagram-Clone/tree/df348142edcd5e8f76171ad00e5f317f98d19bd5'> Square ImageView Widgets</a></li>
-
-<li><a href='https://goo.gl/Kf8UN8'> Login Layout</a></li>
-
-<li><a href='https://goo.gl/rCfjWv'> Register Layout</a></li>
-
-<li>Get Started with Firebase</li>
-
-<li><a href='https://goo.gl/zTsY17'> Setup Firebase Authentication</a></li>
-
-<li><a href='https://goo.gl/9NmTGC'> Testing Firebase Authentication</a></li>
-
-<li><a href='https://goo.gl/dgWBAF'> Setup Register Activity Widgets</a></li>
-
-<li><a href='https://goo.gl/1Ewh7z'> Register New User with Firebase</a></li>
-
-<li>Firebase Database Structure (no source code) </li>
-
-<li><a href='https://goo.gl/AiqA4A'> Check if Username Already Exists</a></li>
-
-<li><a href='https://goo.gl/8D6cSx'> Insert New Data</a></li>
-
-<li><a href='https://goo.gl/y9SJqE'> Email Verificaiton</a></li>
-
-<li><a href='https://goo.gl/ieYAVE'> Enable User Signout</a></li>
-
-<li><a href='https://goo.gl/ReuZZU'> Profile Fragment</a></li>
-
-<li><a href='https://goo.gl/LQViwp'> Profile Fragment Setup</a></li>
-
-<li><a href='https://goo.gl/dcdw5J'> Retrieving User Data from Firebase</a></li>
-
-<li><a href='https://goo.gl/hzg86h'> Setting Profile Fragment Widgets</a></li>
-
-<li><a href='https://goo.gl/ibo3Hh'> Navigating to EditProfile Fragment</a></li>
-
-<li><a href='https://goo.gl/Yupdcy'> Setting EditProfile Fragment Widgets</a></li>
-
-<li><a href='https://goo.gl/gLgHYX'> Saving User Profile Changes</a></li>
-
-<li><a href='https://goo.gl/8LgdWM'> Query Firebase Database</a></li>
-
-<li><a href='https://goo.gl/mDeYzA'> Changing Firebase Authenticated Email (part 1)</a></li>
-
-<li><a href='https://goo.gl/uccU2R'> Changing Firebase Authenticated Email (part 2)</a></li>
-
-<li><a href='https://goo.gl/TWtdtr'> Changing Firebase Authenticated Email (part 3)</a></li>
-
-<li><a href='https://goo.gl/j7vXME'> Update User Account Settings</a></li>
-
-<li><a href='https://goo.gl/AqhtLL'> Verifying Permissions for Sharing</a></li>
-
-<li><a href='https://goo.gl/ifPz9N'> ShareActivity Layout and Tabs</a></li>
-
-<li><a href='https://goo.gl/C3ft9K'> Setup Gallery and Photo Fragments</a></li>
-
-<li><a href='https://goo.gl/29ufSk'> Camera Intent</a></li>
-
-<li><a href='https://goo.gl/FKqjXX'> GalleryFragment Layout</a></li>
-
-<li><a href='https://goo.gl/9MZRWd'> Phone Directories</a></li>
-
-<li><a href='https://goo.gl/CJaUGM'> ShareActivity GridView</a></li>
-
-<li><a href='https://goo.gl/RgpgN2'> Selected Image to Share</a></li>
-
-<li><a href='https://goo.gl/oRKmRj'> NextActivity Setup</a></li>
-
-<li>How to upload images to Firebase Storage (no source code)</li>
-
-<li><a href='https://goo.gl/mGZgB5'> Getting the Image Count</a></li>
-
-<li><a href='https://goo.gl/6t157B'> Firebase Storage Reference</a></li>
-
-<li><a href='https://goo.gl/YTU5ND'> Convert Bitmap to Byte Array</a></li>
-
-<li><a href='https://goo.gl/epw8Xa'> Upload Photo to Firebase Storage</a></li>
-
-<li><a href='https://goo.gl/f2RxFS'> Insert Photo into Firebase Database</a></li>
-
-<li><a href='https://goo.gl/BEZLor'> Changing Profile Photo</a></li>
-
-<li><a href='https://goo.gl/iq2ZTH'> Upload New Profile Photo to Firebase Storage</a></li>
-
-<li><a href='https://goo.gl/1tNrCV'> Fixing the Navigation</a></li>
-
-<li><a href='https://goo.gl/PrZP7r'> New Profile Photo Using Camera</a></li>
-
-<li><a href='https://goo.gl/yTZtnM'> Share Photo using Camera</a></li>
-
-<li><a href='https://goo.gl/bZc1qN'> Populating User Profile Gridview</a></li>
-
-<li><a href='https://goo.gl/4swnKB'> Activity Animations</a></li>
-
-<li><a href='https://goo.gl/3byc52'> Post Viewing Layout (part1)</a></li>
-
-<li><a href='https://goo.gl/a2HPfb'> Post Viewing Layout (part2)</a></li>
-
-<li><a href='https://goo.gl/3bJ78v'> GridImage Selection Interface</a></li>
-
-<li><a href='https://goo.gl/MTJN4g'> Retrieving Post Image From Bundle</a></li>
-
-<li><a href='https://goo.gl/6rdyox'> Image Post Date</a></li>
-
-<li><a href='https://goo.gl/xF1RKF'> Query Photo Details</a></li>
-
-<li><a href='https://goo.gl/cCbDuq'> Likes Toggle Part1</a></li>
-
-<li><a href='https://goo.gl/GRgVyQ'> Likes Toggle Part2</a></li>
-
-<li><a href='https://goo.gl/Fn39Cr'> Likes Toggle Part3</a></li>
-
-<li><a href='https://goo.gl/5kaxZ2'> Likes Toggle Part4</a></li>
-
-<li><a href='https://goo.gl/T8UUE6'> Likes Toggle Part5</a></li>
-
-<li><a href='https://goo.gl/bzTqMP'> Testing Instagram Likes</a></li>
-
-<li><a href='https://goo.gl/z1Ve71'> Comments Layout</a></li>
-
-<li><a href='https://goo.gl/9QkStK'> Comments ListAdapter part1</a></li>
-
-<li><a href='https://goo.gl/A1fRbt'> Comments ListAdapter part2</a></li>
-
-<li><a href='https://goo.gl/PDWjup'> Displaying the First Comment</a></li>
-
-<li><a href='https://goo.gl/NrYk1L'> Inserting Comments</a></li>
-
-<li>More coming every week!</li>
-</ol>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<img src="https://image.ibb.co/mi1GF6/Screenshot_20171115_105557.png" alt="Screenshot1" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://image.ibb.co/byDJTR/Screenshot_20171115_105612.png" alt="Screenshot2" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://image.ibb.co/hwn1hm/Screenshot_20171115_105851.png" alt="Screenshot3" width="200" height="340">
+Profile Pic in original upload quality in full screen:
+<img src="https://image.ibb.co/gZBiv6/Screenshot_20171115_105855.png" alt="Screenshot4" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://image.ibb.co/eHqyTR/Screenshot_20171115_105910.png" alt="Screenshot5" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
+Ability to swipe to next pic and view image in their orinal aspect ratio.
+<img src="https://image.ibb.co/enWiv6/Screenshot_20171115_105913.png" alt="Screenshot6" width="200" height="340">
+Ability to zoom and pan image in full screen.
+<img src="https://image.ibb.co/gFtJTR/Screenshot_20171115_105922.png" alt="Screenshot7" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
+Ability to save pic on phone.
+<img src="https://image.ibb.co/cKrGF6/Screenshot_20171115_110019.png" alt="Screenshot8" width="200" height="340">&nbsp;&nbsp;&nbsp;&nbsp;
+Grid view to view offline and downloaded pics.
+<img src="https://image.ibb.co/iCL42m/Screenshot_20171115_110150.png" alt="Screenshot9" width="200" height="340">
+<br>
+
+<h2>Download from <a href="https://github.com/lcukerd/InstaSwipe/releases/download/v1.2/Insta.Swipe.v1.2.apk">here</a>.</h2>
