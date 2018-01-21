@@ -256,7 +256,7 @@ public class SwipePic extends AppCompatActivity
                         int pos = 0;
                         for (int i = 0; i < 12; i++)
                         {
-                            String url = Scrapper.getimageUrl(result, pos);
+                            String url = Scrapper.getimageUrl(result, pos,true);
                             Log.i(tag, "add url: " + url);
                             urls.add(url);
                             if (i == 11)

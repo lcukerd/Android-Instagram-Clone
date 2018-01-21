@@ -46,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity
     private ProgressBar mProgressBar;
 
     private ArrayList<String> photos = new ArrayList<>();
+    private ArrayList<String> fullphotos = new ArrayList<>();
     private ArrayList<Bitmap> downloads = new ArrayList<>();
     String idurl, sourceCode, username, profilepicURL;
     Bitmap profilePic;
@@ -86,6 +87,7 @@ public class ProfileActivity extends AppCompatActivity
         } else
         {
             photos = getIntent().getStringArrayListExtra("urls");
+            fullphotos = getIntent().getStringArrayListExtra("FullScreenURL");
             idurl = getIntent().getStringExtra("id");
             sourceCode = getIntent().getStringExtra("source");
             username = getIntent().getStringExtra("username");
@@ -109,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity
 
 
         GridImageAdapter adapter = new GridImageAdapter(this, R.layout.layout_grid_imageview,
-                "", photos, idurl);
+                "", photos,fullphotos, idurl);
         gridView.setAdapter(adapter);
 
 

@@ -99,11 +99,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                         try
                         {
                             ArrayList<String> urls = new ArrayList<>();
+                            ArrayList<String> fullurls = new ArrayList<>();
                             String id = "";
                             int pos = 0;
                             for (int i = 0; i < 12; i++)
                             {
-                                String url = Scrapper.getimageUrl(result, pos);
+                                String url = Scrapper.getimageUrl(result, pos,false);
                                 if (url.equals("private"))
                                 {
                                     Toast.makeText(mContext, "Account is private", Toast.LENGTH_SHORT).show();
@@ -114,6 +115,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                                     break;
                                 } else
                                 {
+                                    fullurls.add(Scrapper.getimageUrl(result,pos,true));
 
                                     url.replace("s640x640", "s360x360");
 
@@ -130,6 +132,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.EventV
                             }
                             Intent intent = new Intent(mContext, ProfileActivity.class);
                             intent.putStringArrayListExtra("urls", urls);
+                            intent.putStringArrayListExtra("FullScreenURL",fullurls);
                             intent.putExtra("id", id);
                             intent.putExtra("username", u.name);
                             intent.putExtra("action", "online");

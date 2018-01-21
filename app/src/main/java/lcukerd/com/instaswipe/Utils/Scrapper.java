@@ -65,7 +65,7 @@ public class Scrapper
     /**
      * media link that are video start with v followedby code then '@' after that url of thumbnail starts.
      */
-    public static String getimageUrl(String result, int pos)
+    public static String getimageUrl(String result, int pos, boolean full)
     {
         int start = result.indexOf("thumbnail_src", pos);
         if ((start == -1) && (pos == 0))
@@ -83,7 +83,13 @@ public class Scrapper
             String code = result.substring(cstart, cend);
             Log.i(tag, "is video " + isvideo + "  " + code);
             return "v" + code + "@" + result.substring(start + 17, end);
-        } else
+        } else if (full)
+        {
+            start = result.indexOf("display_src", pos);
+            end = result.indexOf("\",", result.indexOf("display_src", pos));
+            return result.substring(start + 15, end);
+        }
+        else
             return result.substring(start + 17, end);
     }
 
@@ -105,13 +111,10 @@ public class Scrapper
     public static String formatURLforfullscreen(String tempurl)
     {
         int istart = tempurl.indexOf("s640x640/", 0);
-
         if (istart == -1)
             istart = tempurl.indexOf("s360x360/", 0);
         if (istart == -1)
             istart = tempurl.indexOf("s150x150/", 0);
-        if (istart == -1)
-            istart = tempurl.indexOf("/e", 0);
         if (istart == -1)
             return tempurl;
 
