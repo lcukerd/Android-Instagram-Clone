@@ -153,7 +153,7 @@ public class ProfileActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 ArrayList<String> temp = new ArrayList<>();
-                temp.add(profilepicURL);
+                temp.add(Scrapper.getProfilePicHDUrl(sourceCode));
                 Intent intent = new Intent(ProfileActivity.this, SwipePic.class);
                 intent.putStringArrayListExtra("urls", temp);
                 intent.putExtra("id", "-1");

@@ -113,7 +113,7 @@ public class GridImageAdapter extends BaseAdapter {
                 }
             });
         } else {
-            if ((imgURLs.size() - 4 <= position + 1) && (imgURLs.size() >= 12)) {
+            if ((imgURLs.size() - 1 <= position + 1) && (imgURLs.size() >= 12)) {
                 Log.d(tag, "end reached");
                 if ((wait == false) && (nomoreposts == false) && (Private == false) && (internetworking == true))
                     loadmore();
@@ -231,8 +231,8 @@ public class GridImageAdapter extends BaseAdapter {
                         }
                         pos = result.indexOf("\",", result.indexOf("thumbnail_src", pos));
                     } catch (NullPointerException ne) {
-                        internetworking = false;
-                        Toast.makeText(mContext, "Internet Not Working", Toast.LENGTH_SHORT).show();
+                        /*internetworking = false;
+                        Toast.makeText(mContext, "Internet Not Working", Toast.LENGTH_SHORT).show();*/
                         Log.e(tag, "Internet not working", ne);
                     } catch (StringIndexOutOfBoundsException finished) {
                         Toast.makeText(mContext, "No More posts", Toast.LENGTH_SHORT).show();

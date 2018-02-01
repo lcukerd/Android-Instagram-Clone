@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Insta Swipe.iml" filepath="$PROJECT_DIR$/Insta Swipe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/InstaSwipe.iml" filepath="$PROJECT_DIR$/InstaSwipe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
