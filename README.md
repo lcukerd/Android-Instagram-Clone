@@ -1,4 +1,4 @@
-<h1>InstaSwipe</h1>
+<h3>Instagram declared Scraping its data as illegal also they started changing there data format very frequently so I have decided to stop modifying this app any further. Anyone is free to fork(so that i can also use your app) this and modify it as they want.</h3><h1>InstaSwipe</h1>
 
 InstaSwipe is an Instagram client for Android. It will show posts (images and videos) in fullscreen mode and will let you swipe to get to next post. You can also view others profile pic in high resolution in fullscreen. All that without logging in. It might not seem much but will be heaven for some.
 
