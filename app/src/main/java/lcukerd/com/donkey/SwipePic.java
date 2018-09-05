@@ -144,8 +144,7 @@ public class SwipePic extends AppCompatActivity
             else
             {
                 final String url = urls.get(pos);
-
-                if (url.charAt(0) == 'v')
+                /*if (url.charAt(0) == 'v')
                 {
                     progressBar.setVisibility(View.VISIBLE);
                     player.setVisibility(View.VISIBLE);
@@ -183,7 +182,7 @@ public class SwipePic extends AppCompatActivity
                     player.setCallback(this);
                     player.setSource(Uri.parse(url.substring(1)));
                 } else
-                {
+                {*/
                     pic.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
                     pic.setOnLongClickListener(new View.OnLongClickListener()
@@ -197,32 +196,41 @@ public class SwipePic extends AppCompatActivity
                             return true;
                         }
                     });
-                    Glide.with(getActivity())
-                            .load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER) - 1))
-                            .listener(new RequestListener<Drawable>()
-                            {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                            Target<Drawable> target, boolean isFirstResource)
-                                {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model,
-                                                               Target<Drawable> target, DataSource dataSource,
-                                                               boolean isFirstResource)
-                                {
-                                    if (progressBar != null)
+                    Ion.with(this).load(urls.get(getArguments().getInt(ARG_SECTION_NUMBER) - 1)).asString().setCallback(new FutureCallback<String>()
+                    {
+                        @Override
+                        public void onCompleted(Exception e, String result)
+                        {
+                            String url = Scrapper.getFullImageUrls(result);
+                            Glide.with(getActivity())
+                                    .load(url)
+                                    .listener(new RequestListener<Drawable>()
                                     {
-                                        progressBar.setVisibility(View.GONE);
-                                    }
-                                    return false;
-                                }
-                            })
-                            .into(pic);
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                                    Target<Drawable> target, boolean isFirstResource)
+                                        {
+                                            return false;
+                                        }
 
-                }
+                                        @Override
+                                        public boolean onResourceReady(Drawable resource, Object model,
+                                                                       Target<Drawable> target, DataSource dataSource,
+                                                                       boolean isFirstResource)
+                                        {
+                                            if (progressBar != null)
+                                            {
+                                                progressBar.setVisibility(View.GONE);
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .into(pic);
+
+                        }
+                    });
+//                }
+
                 if (urlid.equals("-1") == false)
                 {
                     if (wait == false)
@@ -244,7 +252,7 @@ public class SwipePic extends AppCompatActivity
                 @Override
                 public void onCompleted(Exception e, String result)
                 {
-                    try
+                   /* try
                     {
                         String id = "";
                         int pos = 0;
@@ -271,7 +279,7 @@ public class SwipePic extends AppCompatActivity
                     }
                     formaturls(urls.size() - 12, urls.size());
                     mSectionsPagerAdapter.notifyDataSetChanged();
-                    wait = false;
+                    wait = false;*/
                 }
             });
         }
@@ -282,7 +290,7 @@ public class SwipePic extends AppCompatActivity
             for (int i = start; i < end; i++)
             {
                 String tempurl = urls.get(start);
-                tempurl = Scrapper.formatURLforfullscreen(tempurl);
+//                tempurl = Scrapper.formatURLforfullscreen(tempurl);
                 temp.add(tempurl);
                 urls.remove(start);
                 Log.i(tag, tempurl);

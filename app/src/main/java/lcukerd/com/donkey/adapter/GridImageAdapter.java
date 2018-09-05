@@ -52,7 +52,7 @@ public class GridImageAdapter extends BaseAdapter {
     private boolean wait = false, nomoreposts = false, Private = false, internetworking = true;
 
 
-    public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs, ArrayList<String> fullSizeURL, String id) {
+    public GridImageAdapter(Context context, int layoutResource, String append, ArrayList<String> imgURLs,ArrayList<String> fullSizeURL, String id) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = context;
         interact = new DbInteract(context);
@@ -113,12 +113,6 @@ public class GridImageAdapter extends BaseAdapter {
                 }
             });
         } else {
-            if ((imgURLs.size() - 1 <= position + 1) && (imgURLs.size() >= 12)) {
-                Log.d(tag, "end reached");
-                if ((wait == false) && (nomoreposts == false) && (Private == false) && (internetworking == true))
-                    loadmore();
-            }
-
             String imgURL = imgURLs.get(position);
 
             if (imgURL.charAt(0) == 'v') {
@@ -145,6 +139,7 @@ public class GridImageAdapter extends BaseAdapter {
                         .into(holder.image);
             } else {
                 holder.showifvideo.setVisibility(View.GONE);
+                Log.d(tag,imgURL);
                 Glide.with(mContext)
                         .load(imgURL)
                         .listener(new RequestListener<Drawable>() {
@@ -201,49 +196,6 @@ public class GridImageAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return 0;
-    }
-
-    private void loadmore() {
-        wait = true;
-        Ion.with(mContext).load(idurl).asString().setCallback(new FutureCallback<String>() {
-            @Override
-            public void onCompleted(Exception e, String result) {
-                String id = "";
-                int pos = 0;
-                for (int i = 0; i < 12; i++) {
-                    try {
-                        String url = Scrapper.getimageUrl(result, pos, false);
-                        if (url.equals("private")) {
-                            Private = true;
-                            break;
-                        } else if (url.equals("end")) {
-                            nomoreposts = true;
-                            break;
-                        }
-                        url.replace("s640x640", "s360x360");
-                        imgURLs.add(url);
-                        fullSizeURL.add(Scrapper.getimageUrl(result, pos, true));
-                        Log.d(tag, url);
-                        if (i == 11) {
-                            id = Scrapper.getnextpageID(result, pos);
-                            idurl = idurl.substring(0, idurl.indexOf('=') + 1) + id;
-                            Log.d(tag, idurl);
-                        }
-                        pos = result.indexOf("\",", result.indexOf("thumbnail_src", pos));
-                    } catch (NullPointerException ne) {
-                        /*internetworking = false;
-                        Toast.makeText(mContext, "Internet Not Working", Toast.LENGTH_SHORT).show();*/
-                        Log.e(tag, "Internet not working", ne);
-                    } catch (StringIndexOutOfBoundsException finished) {
-                        Toast.makeText(mContext, "No More posts", Toast.LENGTH_SHORT).show();
-                        nomoreposts = true;
-                        Log.d(tag, "No more posts", e);
-                    }
-                }
-                notifyDataSetChanged();
-                wait = false;
-            }
-        });
     }
 
     class loadImageGrid extends loadImage {

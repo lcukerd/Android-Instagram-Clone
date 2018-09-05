@@ -12,7 +12,6 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import lcukerd.com.donkey.Home.HomeActivity;
 import lcukerd.com.donkey.ProfileActivity;
-import lcukerd.com.donkey.SearchActivity;
 import lcukerd.com.donkey.R;
 
 /**
@@ -49,11 +48,11 @@ public class BottomNavigationViewHelper
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
 
-                    case R.id.ic_search:
-                        Intent intent2 = new Intent(context, SearchActivity.class);//ACTIVITY_NUM = 1
-                        context.startActivity(intent2);
-                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        break;
+//                    case R.id.ic_search:
+//                        Intent intent2 = new Intent(context, SearchActivity.class);//ACTIVITY_NUM = 1
+//                        context.startActivity(intent2);
+//                        callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//                        break;
 
 /*                    case R.id.ic_circle:
                         Intent intent3 = new Intent(context, ShareActivity.class);//ACTIVITY_NUM = 2

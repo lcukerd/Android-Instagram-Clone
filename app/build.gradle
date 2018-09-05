@@ -44,6 +44,7 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
 
     compile 'com.afollestad:easyvideoplayer:0.3.0'
+    compile 'org.jsoup:jsoup:1.11.3'
 }
 
 //Firebase

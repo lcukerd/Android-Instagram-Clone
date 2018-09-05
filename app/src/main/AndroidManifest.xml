@@ -22,8 +22,14 @@
             android:name="lcukerd.com.donkey.SwipePic"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme"/>
-        <activity android:name="lcukerd.com.donkey.ProfileActivity"/>
-        <activity android:name="lcukerd.com.donkey.SearchActivity"/>
+        <activity android:name="lcukerd.com.donkey.ProfileActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:mimeType="text/plain"></data>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

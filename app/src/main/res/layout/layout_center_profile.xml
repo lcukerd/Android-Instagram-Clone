@@ -22,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="100">
 
 
@@ -37,7 +38,7 @@
                         android:layout_height="80dp"
                         android:layout_centerVertical="true"
                         app:civ_border_color="@color/black"
-                        app:civ_border_width="0.5dp"/>
+                        app:civ_border_width="0.5dp" />
 
 
                 </RelativeLayout>
@@ -49,7 +50,7 @@
                     android:layout_marginStart="30dp"
                     android:layout_weight="75">
 
-                    <include layout="@layout/snippet_top_profile"/>
+                    <include layout="@layout/snippet_top_profile" />
 
                 </RelativeLayout>
 

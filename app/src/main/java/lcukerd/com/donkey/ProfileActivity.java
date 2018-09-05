@@ -3,6 +3,7 @@ package lcukerd.com.donkey;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import lcukerd.com.donkey.Utils.Scrapper;
@@ -63,16 +67,27 @@ public class ProfileActivity extends AppCompatActivity
         Log.d(tag, "onCreate: started.");
 
         mUsername = (TextView) findViewById(R.id.username);
-        mProfilePhoto = (CircleImageView) findViewById(R.id.profile_photo);
-        mPosts = (TextView) findViewById(R.id.tvPosts);
-        mFollowers = (TextView) findViewById(R.id.tvFollowers);
-        mFollowing = (TextView) findViewById(R.id.tvFollowing);
         mProgressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
         gridView = (GridView) findViewById(R.id.gridView);
         bottomNavigationView = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         interact = new DbInteract(this);
 
-        if (getIntent().getStringExtra("action").equals("downloads"))
+        if (getIntent().getAction() != null)
+        {
+            idurl = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            Ion.with(this).load(idurl).asString().setCallback(new FutureCallback<String>()
+            {
+                @Override
+                public void onCompleted(Exception e, String result)
+                {
+                    ArrayList<ArrayList<String>> urls= Scrapper.getimageUrls(result);
+                    photos = urls.get(0);
+                    fullphotos = urls.get(1);
+                    setProfileWidgets();
+                    setupGridView();
+                }
+            });
+        } else
         {
             SharedPreferences prefs = getSharedPreferences("lcukerd.com.instaswipe", MODE_PRIVATE);
             if (prefs.getBoolean("intialLaunchG", true))
@@ -85,21 +100,11 @@ public class ProfileActivity extends AppCompatActivity
             idurl = getIntent().getStringExtra("action");
             mUsername.setText("Downloads");
             mProgressBar.setVisibility(View.GONE);
-        } else
-        {
-            photos = getIntent().getStringArrayListExtra("urls");
-            fullphotos = getIntent().getStringArrayListExtra("FullScreenURL");
-            idurl = getIntent().getStringExtra("id");
-            sourceCode = getIntent().getStringExtra("source");
-            username = getIntent().getStringExtra("username");
-            profilePic = interact.getImage(getIntent().getByteArrayExtra("profile pic"));
-            profilepicURL = getIntent().getStringExtra("profile pic url");
-            setProfileWidgets();
+            setupGridView();
         }
 
 
         setupBottomNavigationView();
-        setupGridView();
     }
 
     private void setupGridView()
@@ -112,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity
 
 
         GridImageAdapter adapter = new GridImageAdapter(this, R.layout.layout_grid_imageview,
-                "", photos,fullphotos, idurl);
+                "", photos, fullphotos, idurl);
         gridView.setAdapter(adapter);
 
 
@@ -120,48 +125,7 @@ public class ProfileActivity extends AppCompatActivity
 
     private void setProfileWidgets()
     {
-        final AccountDetails account = new AccountDetails(Scrapper.getFollowers(sourceCode),
-                Scrapper.getFollowing(sourceCode), Scrapper.getPosts(sourceCode), profilePic, username);
-        if (profilepicURL.equals(Scrapper.getProfilePicUrl(sourceCode)) == false)
-        {
-            Log.d(tag, "Profile Pic updated");
-            ImageLoader imageLoader = ImageLoader.getInstance();
-            imageLoader.init(ImageLoaderConfiguration.createDefault(this));
-            imageLoader.loadImage(Scrapper.getProfilePicUrl(sourceCode),
-                    new SimpleImageLoadingListener()
-                    {
-                        @Override
-                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage)
-                        {
-                            profilePic = loadedImage;
-                            profilepicURL = Scrapper.getProfilePicUrl(sourceCode);
-                            interact.updateprofilepic(username, loadedImage);
-                            account.setProfile_photo(profilePic);
-                            mProfilePhoto.setImageBitmap(loadedImage);
-                        }
-                    });
-        }
-        mProfilePhoto.setImageBitmap(account.getProfile_photo());
-        mUsername.setText(account.getUsername());
-        mPosts.setText(String.valueOf(account.getPosts()));
-        mFollowing.setText(account.getFollowing());
-        mFollowers.setText(account.getFollowers());
         mProgressBar.setVisibility(View.GONE);
-
-        mProfilePhoto.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                ArrayList<String> temp = new ArrayList<>();
-                temp.add(Scrapper.getProfilePicHDUrl(sourceCode));
-                Intent intent = new Intent(ProfileActivity.this, SwipePic.class);
-                intent.putStringArrayListExtra("urls", temp);
-                intent.putExtra("id", "-1");
-                intent.putExtra("position", 0);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setupBottomNavigationView()
