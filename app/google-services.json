@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:352531809002:android:d49c650ed5c2c559",
         "android_client_info": {
-          "package_name": "lcukerd.com.instaswipe"
+          "package_name": "lcukerd.com.donkey"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "352531809002-gi64mu16aovb40gf82b1fi2sen302e9h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "lcukerd.com.instaswipe",
+            "package_name": "lcukerd.com.donkey",
             "certificate_hash": "a1282f8c2b490a54cc1d7bdcefea5c630f537950"
           }
         },

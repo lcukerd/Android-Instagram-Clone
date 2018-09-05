@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">InstaSwipe</string>
+    <string name="app_name">DonkeySwipe</string>
 
     <!-- fragment names -->
     <string name="edit_profile_fragment">Edit Profile</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="lcukerd.com.instaswipe">
+          package="lcukerd.com.donkey">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -11,7 +11,7 @@
         android:roundIcon="@drawable/instaicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="lcukerd.com.instaswipe.Home.HomeActivity">
+        <activity android:name="lcukerd.com.donkey.Home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -19,11 +19,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="lcukerd.com.instaswipe.SwipePic"
+            android:name="lcukerd.com.donkey.SwipePic"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme"/>
-        <activity android:name="lcukerd.com.instaswipe.ProfileActivity"/>
-        <activity android:name="lcukerd.com.instaswipe.SearchActivity"/>
+        <activity android:name="lcukerd.com.donkey.ProfileActivity"/>
+        <activity android:name="lcukerd.com.donkey.SearchActivity"/>
     </application>
 
 </manifest>

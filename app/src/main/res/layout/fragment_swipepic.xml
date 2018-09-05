@@ -3,7 +3,7 @@
                 android:id="@+id/showpicl"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="lcukerd.com.instaswipe.SwipePic$PlaceholderFragment">
+                tools:context="lcukerd.com.instaswipe.lcukerd.com.donkey.SwipePic$PlaceholderFragment">
 
     <ImageView
         android:layout_width="match_parent"

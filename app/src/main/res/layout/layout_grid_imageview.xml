@@ -4,7 +4,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-    <lcukerd.com.instaswipe.Utils.SquareImageView
+    <lcukerd.com.donkey.Utils.SquareImageView
         android:id="@+id/gridImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +16,7 @@
         android:layout_height="50dp"
         android:layout_centerInParent="true"/>
 
-    <lcukerd.com.instaswipe.Utils.SquareImageView
+    <lcukerd.com.donkey.Utils.SquareImageView
         android:id="@+id/videoicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
