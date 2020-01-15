@@ -6,6 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import lcukerd.com.instaswipe.models.User;
@@ -58,7 +61,27 @@ public class Scrapper {
     public static String getProfilePicHDUrl(String result) {
         int start = result.indexOf("\"profile_pic_url_hd\"");
         int end = result.indexOf("\",", start);
-        return result.substring(start + 22, end);
+        return unescapeJava(result.substring(start + 22, end));
+    }
+
+    public static String unescapeJava(String escaped) {
+        if(escaped.indexOf("\\u")==-1)
+            return escaped;
+
+        String processed="";
+
+        int position=escaped.indexOf("\\u");
+        while(position!=-1) {
+            if(position!=0)
+                processed+=escaped.substring(0,position);
+            String token=escaped.substring(position+2,position+6);
+            escaped=escaped.substring(position+6);
+            processed+=(char)Integer.parseInt(token,16);
+            position=escaped.indexOf("\\u");
+        }
+        processed+=escaped;
+
+        return processed;
     }
 
     /**
