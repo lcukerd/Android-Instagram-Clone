@@ -141,21 +141,21 @@ public class Scrapper {
     }
 
     public static String getFollowers(String result) {
-        int index = result.indexOf("Followers");
-        int start = result.indexOf('"', index - 12);
-        return result.substring(start + 1, index - 1);
+        int index = result.indexOf("edge_followed_by");
+        int end = result.indexOf('}', index + 27);
+        return result.substring(index + 27, end);
     }
 
     public static String getFollowing(String result) {
-        int index = result.indexOf("Following");
-        int start = result.indexOf(',', index - 12);
-        return result.substring(start + 2, index - 1);
+        int index = result.indexOf("edge_follow\"");
+        int end = result.indexOf('}', index + 22);
+        return result.substring(index + 22, end);
     }
 
     public static String getPosts(String result) {
-        int index = result.indexOf("Posts");
-        int start = result.indexOf(',', index - 12);
-        return result.substring(start + 2, index - 1);
+        int index = result.indexOf("edge_owner_to_timeline_media");
+        int end = result.indexOf(',', index + 39);
+        return result.substring(index + 39, end);
     }
 
     public static String getVideoPageUrl(String code, String id) {
